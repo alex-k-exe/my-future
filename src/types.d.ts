@@ -21,7 +21,7 @@ export interface EquipmentDonation {
 }
 
 export interface Project {
-    id: string;
+    id: string;  // PK
     name: string;
     description: string;
     thumbnail: Base64Image;
