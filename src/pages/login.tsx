@@ -30,8 +30,9 @@ export function LoginForm({
         // Add your login logic here
     };
 
-    return (
-        <div className={cn("flex flex-col gap-6", className)} {...props}>
+         return (
+         <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+             <div className={cn("flex flex-col gap-6 w-full max-w-2xl", className)} {...props}>
             <Card className="w-full min-w-[500px]">
                 <CardHeader className="px-12 pt-8">
                     <CardTitle>Login to your account</CardTitle>
@@ -95,6 +96,7 @@ export function LoginForm({
                     </form>
                 </CardContent>
             </Card>
+            </div>
         </div>
     );
 }
