@@ -20,10 +20,12 @@ function App() {
         <Router>
             <AppContext.Provider value={context}>
                 <Routes>
-                    <Route path="/" element={<Layout />}>
-                        <Route index element={<Home />} />
+                    
+                        
                         <Route path="/login" element={<LoginForm />} />
                         <Route path="/register" element={<RegisterForm />} />
+                        <Route path="/" element={<Layout />}>
+                        <Route index element={<Home />} />
                         <Route path="project" element={<Project />} />
                         <Route
                             path="/project/:id"
