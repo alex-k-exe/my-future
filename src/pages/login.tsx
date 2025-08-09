@@ -12,10 +12,15 @@ import {
 import { Input } from "../components/ui/input"
 import { Label } from "../components/ui/label"
 
+interface LoginFormProps extends ComponentPropsWithoutRef<"div"> {
+  onShowRegister?: () => void
+}
+
 export function LoginForm({
   className,
+  onShowRegister,
   ...props
-}: ComponentPropsWithoutRef<"div">) {
+}: LoginFormProps) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
@@ -77,9 +82,13 @@ export function LoginForm({
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
-              <a href="#" className="underline underline-offset-4">
+              <button 
+                type="button"
+                onClick={onShowRegister}
+                className="underline underline-offset-4 hover:text-primary"
+              >
                 Sign up
-              </a>
+              </button>
             </div>
           </form>
         </CardContent>
