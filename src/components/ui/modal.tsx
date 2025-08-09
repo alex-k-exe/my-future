@@ -15,7 +15,7 @@ export function Modal({
     onClose,
     title,
     children,
-    className,
+    className
 }: ModalProps) {
     if (!isOpen) return null;
 
@@ -31,7 +31,7 @@ export function Modal({
             <div
                 className={cn(
                     "relative bg-white rounded-lg shadow-lg max-w-md w-full mx-4 max-h-[95vh] overflow-hidden flex flex-col",
-                    className,
+                    className
                 )}
             >
                 {/* Header */}

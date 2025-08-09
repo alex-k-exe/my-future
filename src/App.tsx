@@ -13,7 +13,7 @@ import type { Context } from "./types";
 
 function App() {
     const [context, setContext] = useState<Context>({
-        user: null,
+        user: null
     });
 
     return (

@@ -7,7 +7,7 @@ import {
     CardContent,
     CardDescription,
     CardHeader,
-    CardTitle,
+    CardTitle
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -42,7 +42,7 @@ export function RegisterForm({
             confirmPassword,
             address1,
             address2,
-            accountImage: accountImage?.name,
+            accountImage: accountImage?.name
         });
         // Add your registration logic here
     };
@@ -59,7 +59,7 @@ export function RegisterForm({
             <div
                 className={cn(
                     "flex flex-col gap-6 w-full max-w-4xl",
-                    className,
+                    className
                 )}
                 {...props}
             >
@@ -199,7 +199,7 @@ export function RegisterForm({
                                             value={confirmPassword}
                                             onChange={(e) =>
                                                 setConfirmPassword(
-                                                    e.target.value,
+                                                    e.target.value
                                                 )
                                             }
                                             required
