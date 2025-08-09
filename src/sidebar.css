@@ -7,7 +7,6 @@ aside {
 
 aside.expanded {
     width: 20rem;
-    flex-shrink: 0; /*just Added */
 }
 
 aside.collapsed {
