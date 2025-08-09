@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./App.css";
-import { LoginForm } from "./pages/login";
-import { RegisterForm } from "./pages/register";
+import { LoginForm } from "./pages/Login";
+import { RegisterForm } from "./pages/Register";
 import Project from "./pages/Project";
 import Profile from "./pages/Profile";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
