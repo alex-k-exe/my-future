@@ -3,16 +3,12 @@ import { LoginForm } from "./pages/Login.tsx";
 import { RegisterForm } from "./pages/Register.tsx";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home.tsx";
-import {createContext, useState} from "react";
-import type {Context} from "./types";
-
-const AppContext = createContext({
-    user: null
-} as Context);
+import { useState } from "react";
+import { AppContext } from "./lib/AppContext.ts";
 
 function App() {
     const [context, setContext] = useState({
-        user: null
+        user: null,
     });
 
     return (

@@ -24,7 +24,8 @@ export interface Project {
     id: string; // PK
     name: string;
     description: string;
-    dateStarted: string;
+    category: string;
+    dateStarted: string;    
     dateCompleted?: string;
     thumbnail: Base64Image;
     progress: number;
