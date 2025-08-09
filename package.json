@@ -1,5 +1,6 @@
 {
   "name": "my-future",
+  "description": "2025 Winter Hackathon project",
   "private": true,
   "version": "0.0.0",
   "type": "module",
