@@ -270,7 +270,7 @@ export default function Project() {
                                 onClick={() => setSelectedCategory(category)}
                                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                                     selectedCategory === category
-                                        ? "bg-red-500 text-blue-500 hover:bg-red-600"
+                                        ? "bg-gray-500 text-white hover:bg-gray-600"
                                         : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                                 }`}
                             >

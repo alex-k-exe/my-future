@@ -381,7 +381,7 @@ export default function Profile() {
                     </div>
 
                     {/* Save Button */}
-                    <div className="flex justify-center py-8 border-t-4 border-blue-500 bg-blue-50 mt-6">
+                    <div className="flex justify-center py-8 mt-6">
                         <Button onClick={handleSaveChanges}>Save</Button>
                     </div>
                 </div>
