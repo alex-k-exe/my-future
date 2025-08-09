@@ -1,5 +1,5 @@
 {
     "name": "my-future",
     "compatibility_date": "2025-08-09",
-    "main": "src/main.tsx"
+    "main": "src/main.tsx",
 }
