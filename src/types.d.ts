@@ -5,12 +5,10 @@ export type ProjectId = string;
 export interface User {
     uuid: UUID; // PK
     email: string;
-    phoneNumber: string;
     points: number;
     name: string;
     accountType: "citizen" | "business" | "government";
     password: string;
-    birthdate: string;
     address: string;
     pfp: Base64Image;
     contributedTo: ProjectId[];
