@@ -21,7 +21,8 @@ export default function ProjectDetail() {
         id: parseInt(id || "1"),
         title: "Project Title",
         category: "Category",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         progress: 85,
         totalGoal: "XXXXXXXX out of XXXX",
         activeDays: "XXX Active Days",
@@ -106,7 +107,7 @@ export default function ProjectDetail() {
                                     {projectData.totalGoal}
                                 </span>
                             </div>
-                            
+
                             <div className="flex justify-between items-center py-3 border-b border-gray-200">
                                 <span className="text-lg text-gray-700">
                                     XXXXXX
@@ -115,7 +116,7 @@ export default function ProjectDetail() {
                                     Goals Reached
                                 </span>
                             </div>
-                            
+
                             <div className="flex justify-between items-center py-3 border-b border-gray-200">
                                 <span className="text-lg text-gray-700">
                                     XXX

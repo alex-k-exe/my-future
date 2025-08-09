@@ -18,8 +18,6 @@ interface ProjectCardProps {
     onClick?: () => void;
 }
 
-
-
 function ProjectCard({
     title,
     description,
