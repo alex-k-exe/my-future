@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import {
@@ -14,13 +15,20 @@ interface ProjectCardProps {
     description: string;
     category: string;
     progress?: number;
+    onClick?: () => void;
 }
+
+
 
 function ProjectCard({
     title,
     description,
     progress = 75,
-}: Omit<ProjectCardProps, "category"> & { progress?: number }) {
+    onClick,
+}: Omit<ProjectCardProps, "category"> & {
+    progress?: number;
+    onClick?: () => void;
+}) {
     return (
         <Card className="hover:shadow-lg transition-shadow mb-4">
             <CardContent className="p-4 flex items-start gap-4">
@@ -53,7 +61,10 @@ function ProjectCard({
                 {/* Content on the right */}
                 <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start mb-2">
-                        <CardTitle className="text-base font-semibold">
+                        <CardTitle
+                            className="text-base font-semibold cursor-pointer hover:text-blue-600 transition-colors"
+                            onClick={onClick}
+                        >
                             {title}
                         </CardTitle>
                         <div className="text-xs text-gray-400">view</div>
@@ -86,6 +97,8 @@ function ProjectCard({
 
 export default function Project() {
     const [searchQuery, setSearchQuery] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("category");
+    const navigate = useNavigate();
 
     // Sample project data organized by columns
     const projectColumns = [
@@ -96,8 +109,11 @@ export default function Project() {
                     id: 1,
                     title: "Project Title",
                     description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
                     progress: 85,
+                    category: "Category",
+                    totalGoal: "XXXXXXXX out of XXXX",
+                    activeDays: "XXX Active Days",
                 },
                 {
                     id: 2,
@@ -192,6 +208,10 @@ export default function Project() {
 
     const categories = ["category", "category", "category"];
 
+    const handleProjectClick = (project: any) => {
+        navigate(`/project/${project.id}`);
+    };
+
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Main Content Area */}
@@ -218,6 +238,29 @@ export default function Project() {
                             <Filter className="w-4 h-4" />
                         </Button>
                     </div>
+
+                    {/* Category Buttons */}
+                    <div className="flex items-center gap-3">
+                        {categories.map((category, index) => (
+                            <Button
+                                key={index}
+                                variant={
+                                    selectedCategory === category
+                                        ? "default"
+                                        : "outline"
+                                }
+                                size="sm"
+                                onClick={() => setSelectedCategory(category)}
+                                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                                    selectedCategory === category
+                                        ? "bg-red-500 text-blue-500 hover:bg-red-600"
+                                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                                }`}
+                            >
+                                {category}
+                            </Button>
+                        ))}
+                    </div>
                 </div>
 
                 {/* Projects Grid with Category Headers */}
@@ -237,6 +280,9 @@ export default function Project() {
                                         title={project.title}
                                         description={project.description}
                                         progress={project.progress}
+                                        onClick={() =>
+                                            handleProjectClick(project)
+                                        }
                                     />
                                 ))}
                             </div>

@@ -72,17 +72,20 @@ export default function Profile() {
         {
             id: 1,
             title: "Project Title",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+            description:
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
         },
         {
             id: 2,
             title: "Project Title",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+            description:
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
         },
         {
             id: 3,
             title: "Project Title",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+            description:
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
         },
     ];
 
@@ -134,7 +137,9 @@ export default function Profile() {
                 <div className="space-y-6">
                     {/* Current Points */}
                     <div className="bg-gray-300 rounded-lg p-6 text-center">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Points</h3>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                            Points
+                        </h3>
                         <div className="text-6xl font-bold text-gray-900">
                             {profileData.points}
                         </div>
@@ -142,7 +147,9 @@ export default function Profile() {
 
                     {/* Lifetime Points */}
                     <div className="bg-gray-300 rounded-lg p-6 text-center">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Lifetime Points Spent</h3>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                            Lifetime Points Spent
+                        </h3>
                         <div className="text-6xl font-bold text-gray-900">
                             {profileData.lifetimePoints}
                         </div>
@@ -152,26 +159,37 @@ export default function Profile() {
                 {/* Right Column - Past Projects */}
                 <div className="lg:col-span-2">
                     <div className="bg-gray-300 rounded-lg p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-6">Past Projects</h3>
-                        
+                        <h3 className="text-lg font-semibold text-gray-900 mb-6">
+                            Past Projects
+                        </h3>
+
                         <div className="space-y-4">
                             {pastProjects.map((project) => (
-                                <div key={project.id} className="bg-gray-200 rounded-lg p-4 flex items-center gap-4">
+                                <div
+                                    key={project.id}
+                                    className="bg-gray-200 rounded-lg p-4 flex items-center gap-4"
+                                >
                                     {/* Project Icon/Image placeholder */}
                                     <div className="w-16 h-16 bg-gray-400 rounded flex items-center justify-center flex-shrink-0">
                                         <div className="w-8 h-8 bg-gray-500 transform rotate-45"></div>
                                         <div className="w-8 h-8 bg-gray-500 transform -rotate-45 -ml-8"></div>
                                     </div>
-                                    
+
                                     {/* Project Details */}
                                     <div className="flex-1">
-                                        <h4 className="font-semibold text-gray-900 mb-2">{project.title}</h4>
-                                        <p className="text-sm text-gray-700">{project.description}</p>
+                                        <h4 className="font-semibold text-gray-900 mb-2">
+                                            {project.title}
+                                        </h4>
+                                        <p className="text-sm text-gray-700">
+                                            {project.description}
+                                        </p>
                                     </div>
 
                                     {/* Right side placeholder */}
                                     <div className="text-right">
-                                        <div className="text-xs text-gray-600">•••</div>
+                                        <div className="text-xs text-gray-600">
+                                            •••
+                                        </div>
                                     </div>
                                 </div>
                             ))}
@@ -197,7 +215,12 @@ export default function Profile() {
                                     id="firstName"
                                     type="text"
                                     value={editData.firstName}
-                                    onChange={(e) => setEditData({ ...editData, firstName: e.target.value })}
+                                    onChange={(e) =>
+                                        setEditData({
+                                            ...editData,
+                                            firstName: e.target.value,
+                                        })
+                                    }
                                 />
                             </div>
 
@@ -207,7 +230,12 @@ export default function Profile() {
                                     id="email"
                                     type="email"
                                     value={editData.email}
-                                    onChange={(e) => setEditData({ ...editData, email: e.target.value })}
+                                    onChange={(e) =>
+                                        setEditData({
+                                            ...editData,
+                                            email: e.target.value,
+                                        })
+                                    }
                                 />
                             </div>
 
@@ -217,7 +245,12 @@ export default function Profile() {
                                     id="password"
                                     type="password"
                                     value={editData.password}
-                                    onChange={(e) => setEditData({ ...editData, password: e.target.value })}
+                                    onChange={(e) =>
+                                        setEditData({
+                                            ...editData,
+                                            password: e.target.value,
+                                        })
+                                    }
                                 />
                             </div>
 
@@ -228,14 +261,24 @@ export default function Profile() {
                                     type="text"
                                     placeholder="Address Line 1"
                                     value={editData.address1}
-                                    onChange={(e) => setEditData({ ...editData, address1: e.target.value })}
+                                    onChange={(e) =>
+                                        setEditData({
+                                            ...editData,
+                                            address1: e.target.value,
+                                        })
+                                    }
                                 />
                                 <Input
                                     id="address2"
                                     type="text"
                                     placeholder="Address Line 2"
                                     value={editData.address2}
-                                    onChange={(e) => setEditData({ ...editData, address2: e.target.value })}
+                                    onChange={(e) =>
+                                        setEditData({
+                                            ...editData,
+                                            address2: e.target.value,
+                                        })
+                                    }
                                     className="mt-2"
                                 />
                             </div>
@@ -249,19 +292,33 @@ export default function Profile() {
                                     id="lastName"
                                     type="text"
                                     value={editData.lastName}
-                                    onChange={(e) => setEditData({ ...editData, lastName: e.target.value })}
+                                    onChange={(e) =>
+                                        setEditData({
+                                            ...editData,
+                                            lastName: e.target.value,
+                                        })
+                                    }
                                 />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="accountType">Account Type</Label>
+                                <Label htmlFor="accountType">
+                                    Account Type
+                                </Label>
                                 <select
                                     id="accountType"
                                     value={editData.accountType}
-                                    onChange={(e) => setEditData({ ...editData, accountType: e.target.value })}
+                                    onChange={(e) =>
+                                        setEditData({
+                                            ...editData,
+                                            accountType: e.target.value,
+                                        })
+                                    }
                                     className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                                 >
-                                    <option value="">Select account type</option>
+                                    <option value="">
+                                        Select account type
+                                    </option>
                                     <option value="Personal">Personal</option>
                                     <option value="Business">Business</option>
                                     <option value="Premium">Premium</option>
@@ -269,17 +326,26 @@ export default function Profile() {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                                <Label htmlFor="confirmPassword">
+                                    Confirm Password
+                                </Label>
                                 <Input
                                     id="confirmPassword"
                                     type="password"
                                     value={editData.confirmPassword}
-                                    onChange={(e) => setEditData({ ...editData, confirmPassword: e.target.value })}
+                                    onChange={(e) =>
+                                        setEditData({
+                                            ...editData,
+                                            confirmPassword: e.target.value,
+                                        })
+                                    }
                                 />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="accountImage">Account Image</Label>
+                                <Label htmlFor="accountImage">
+                                    Account Image
+                                </Label>
                                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
                                     <input
                                         id="accountImage"
