@@ -24,8 +24,14 @@ export interface Project {
     id: string; // PK
     name: string;
     description: string;
+    dateStarted: string;
     thumbnail: Base64Image;
+    progress: number;
     goal: number;
     contact: string;
     businessDonations: EquipmentDonation[];
+}
+
+export interface Context {
+    user: User | null;
 }
