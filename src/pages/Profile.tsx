@@ -15,7 +15,7 @@ export default function Profile() {
         address: "123 Fake Street",
         email: "johnpork@gmail.com",
         points: 256,
-        lifetimePoints: 1045,
+        lifetimePoints: 1045
     });
 
     const [editData, setEditData] = useState({
@@ -27,7 +27,7 @@ export default function Profile() {
         confirmPassword: "",
         address1: profileData.address,
         address2: "",
-        accountImage: null as File | null,
+        accountImage: null as File | null
     });
 
     const handleEditClick = () => {
@@ -40,7 +40,7 @@ export default function Profile() {
             confirmPassword: "",
             address1: profileData.address,
             address2: "",
-            accountImage: null,
+            accountImage: null
         });
         setIsEditModalOpen(true);
     };
@@ -52,7 +52,7 @@ export default function Profile() {
             lastName: editData.lastName,
             fullName: `${editData.firstName} ${editData.lastName}`,
             address: editData.address1,
-            email: editData.email,
+            email: editData.email
         });
         setIsEditModalOpen(false);
     };
@@ -73,20 +73,20 @@ export default function Profile() {
             id: 1,
             title: "Project Title",
             description:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
         },
         {
             id: 2,
             title: "Project Title",
             description:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
         },
         {
             id: 3,
             title: "Project Title",
             description:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-        },
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
+        }
     ];
 
     return (
@@ -218,7 +218,7 @@ export default function Profile() {
                                     onChange={(e) =>
                                         setEditData({
                                             ...editData,
-                                            firstName: e.target.value,
+                                            firstName: e.target.value
                                         })
                                     }
                                 />
@@ -233,7 +233,7 @@ export default function Profile() {
                                     onChange={(e) =>
                                         setEditData({
                                             ...editData,
-                                            email: e.target.value,
+                                            email: e.target.value
                                         })
                                     }
                                 />
@@ -248,7 +248,7 @@ export default function Profile() {
                                     onChange={(e) =>
                                         setEditData({
                                             ...editData,
-                                            password: e.target.value,
+                                            password: e.target.value
                                         })
                                     }
                                 />
@@ -264,7 +264,7 @@ export default function Profile() {
                                     onChange={(e) =>
                                         setEditData({
                                             ...editData,
-                                            address1: e.target.value,
+                                            address1: e.target.value
                                         })
                                     }
                                 />
@@ -276,7 +276,7 @@ export default function Profile() {
                                     onChange={(e) =>
                                         setEditData({
                                             ...editData,
-                                            address2: e.target.value,
+                                            address2: e.target.value
                                         })
                                     }
                                     className="mt-2"
@@ -295,7 +295,7 @@ export default function Profile() {
                                     onChange={(e) =>
                                         setEditData({
                                             ...editData,
-                                            lastName: e.target.value,
+                                            lastName: e.target.value
                                         })
                                     }
                                 />
@@ -311,7 +311,7 @@ export default function Profile() {
                                     onChange={(e) =>
                                         setEditData({
                                             ...editData,
-                                            accountType: e.target.value,
+                                            accountType: e.target.value
                                         })
                                     }
                                     className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
@@ -336,7 +336,7 @@ export default function Profile() {
                                     onChange={(e) =>
                                         setEditData({
                                             ...editData,
-                                            confirmPassword: e.target.value,
+                                            confirmPassword: e.target.value
                                         })
                                     }
                                 />

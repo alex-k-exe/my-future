@@ -25,7 +25,7 @@ export default function ProjectDetail() {
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         progress: 85,
         totalGoal: "XXXXXXXX out of XXXX",
-        activeDays: "XXX Active Days",
+        activeDays: "XXX Active Days"
     };
 
     const handleBack = () => {
@@ -94,7 +94,7 @@ export default function ProjectDetail() {
                                 <div
                                     className="bg-gray-400 h-4 rounded-full"
                                     style={{
-                                        width: `${projectData.progress}%`,
+                                        width: `${projectData.progress}%`
                                     }}
                                 ></div>
                             </div>

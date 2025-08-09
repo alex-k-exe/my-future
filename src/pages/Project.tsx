@@ -6,7 +6,7 @@ import {
     Card,
     CardContent,
     CardHeader,
-    CardTitle,
+    CardTitle
 } from "../components/ui/card";
 import { Search, Filter } from "lucide-react";
 
@@ -22,7 +22,7 @@ function ProjectCard({
     title,
     description,
     progress = 75,
-    onClick,
+    onClick
 }: Omit<ProjectCardProps, "category"> & {
     progress?: number;
     onClick?: () => void;
@@ -111,30 +111,30 @@ export default function Project() {
                     progress: 85,
                     category: "Category",
                     totalGoal: "XXXXXXXX out of XXXX",
-                    activeDays: "XXX Active Days",
+                    activeDays: "XXX Active Days"
                 },
                 {
                     id: 2,
                     title: "Project Title",
                     description:
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 60,
+                    progress: 60
                 },
                 {
                     id: 3,
                     title: "Project Title",
                     description:
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 92,
+                    progress: 92
                 },
                 {
                     id: 4,
                     title: "Project Title",
                     description:
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 45,
-                },
-            ],
+                    progress: 45
+                }
+            ]
         },
         {
             category: "category header",
@@ -144,30 +144,30 @@ export default function Project() {
                     title: "Project Title",
                     description:
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 78,
+                    progress: 78
                 },
                 {
                     id: 6,
                     title: "Project Title",
                     description:
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 30,
+                    progress: 30
                 },
                 {
                     id: 7,
                     title: "Project Title",
                     description:
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 65,
+                    progress: 65
                 },
                 {
                     id: 8,
                     title: "Project Title",
                     description:
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 88,
-                },
-            ],
+                    progress: 88
+                }
+            ]
         },
         {
             category: "category header",
@@ -177,31 +177,31 @@ export default function Project() {
                     title: "Project Title",
                     description:
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 55,
+                    progress: 55
                 },
                 {
                     id: 10,
                     title: "Project Title",
                     description:
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 95,
+                    progress: 95
                 },
                 {
                     id: 11,
                     title: "Project Title",
                     description:
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 40,
+                    progress: 40
                 },
                 {
                     id: 12,
                     title: "Project Title",
                     description:
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 72,
-                },
-            ],
-        },
+                    progress: 72
+                }
+            ]
+        }
     ];
 
     const categories = ["category", "category", "category"];

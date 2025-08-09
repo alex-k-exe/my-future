@@ -13,7 +13,7 @@ import type { Context } from "./types";
 
 function App() {
     const [context, setContext] = useState<Context>({
-        user: null,
+        user: null
     });
 
     return (
@@ -25,7 +25,10 @@ function App() {
                         <Route path="/login" element={<LoginForm />} />
                         <Route path="/register" element={<RegisterForm />} />
                         <Route path="/project" element={<Project />} />
-                        <Route path="/project/:id" element={<ProjectDetail />} />
+                        <Route
+                            path="/project/:id"
+                            element={<ProjectDetail />}
+                        />
                         <Route path="/profile" element={<Profile />} />
                     </Route>
                 </Routes>
