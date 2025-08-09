@@ -25,6 +25,7 @@ export interface Project {
     name: string;
     description: string;
     dateStarted: string;
+    dateCompleted?: string;
     thumbnail: Base64Image;
     progress: number;
     goal: number;
