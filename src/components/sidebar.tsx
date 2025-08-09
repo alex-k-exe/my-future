@@ -22,9 +22,15 @@ export default function SideBar({ sidebarState, toggleSideBar }: SideBarProps) {
                 />
             </div>
             <nav>
-                <Link to="/" className="links">Home</Link>
-                <Link to="/project" className="links">Projects</Link>
-                <Link to="/profile" className="links">Profile</Link>
+                <Link to="/" className="links">
+                    Home
+                </Link>
+                <Link to="/project" className="links">
+                    Projects
+                </Link>
+                <Link to="/profile" className="links">
+                    Profile
+                </Link>
             </nav>
         </aside>
     );

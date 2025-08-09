@@ -1,5 +1,6 @@
 import type { ComponentPropsWithoutRef } from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { cn } from "../lib/utils";
 import { Button } from "../components/ui/button";
 import {
@@ -30,6 +31,7 @@ export function RegisterForm({
     const [address1, setAddress1] = useState("");
     const [address2, setAddress2] = useState("");
     const [accountImage, setAccountImage] = useState<File | null>(null);
+    const navigate = useNavigate();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -254,7 +256,7 @@ export function RegisterForm({
                                     type="button"
                                     variant="outline"
                                     className="w-full"
-                                    onClick={onBackToLogin}
+                                    onClick={() => navigate("/login")}
                                 >
                                     Back to Login
                                 </Button>
