@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import sidebarIcon from "../assets/sidebarIcon.svg";
 import "../sidebar.css";
 
@@ -13,7 +14,6 @@ export default function SideBar({ sidebarState, toggleSideBar }: SideBarProps) {
             id="sidebar"
         >
             <div className="profileMenu">
-                <p id="profileLink">Profile</p>
                 <img
                     src={sidebarIcon}
                     alt="Toggle Sidebar"
@@ -21,15 +21,11 @@ export default function SideBar({ sidebarState, toggleSideBar }: SideBarProps) {
                     className="sidebarToggle clickable"
                 />
             </div>
-            <div className="addTaskMenu clickable">
-                <p>Add Task</p>
-            </div>
-            <div className="todayMenu clickable">
-                <p>Today</p>
-            </div>
-            <div className="upcomingMenu clickable">
-                <p>Upcoming</p>
-            </div>
+            <nav>
+                <Link to="/" className="links">Home</Link>
+                <Link to="/project" className="links">Projects</Link>
+                <Link to="/profile" className="links">Profile</Link>
+            </nav>
         </aside>
     );
 }

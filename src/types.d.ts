@@ -34,7 +34,15 @@ export interface Project {
     citizenContributions: Record<UUID, number>;
     businessDonations: EquipmentDonation[];
 }
-
+/*
+    id: ProjectId; // PK
+    name: string;
+    description: string;
+    category: string;
+    thumbnail: Base64Image;
+    progress: number;
+    goal: number;
+*/
 export interface Context {
     user: User | null;
 }

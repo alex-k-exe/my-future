@@ -1,35 +1,29 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle
-} from "../components/ui/card";
+import { Card, CardContent, CardTitle } from "../components/ui/card";
 import { Search, Filter } from "lucide-react";
+import type { Base64Image, Project, ProjectId } from "../types";
+import { Badge } from "../components/ui/badge";
 
-interface ProjectCardProps {
-    title: string;
-    description: string;
-    category: string;
-    progress?: number;
-    onClick?: () => void;
-}
-
-function ProjectCard({
-    title,
-    description,
-    progress = 75,
-    onClick
-}: Omit<ProjectCardProps, "category"> & {
-    progress?: number;
-    onClick?: () => void;
-}) {
+function ProjectCard(
+    project: {
+        id: ProjectId;
+        name: string;
+        description: string;
+        category: string;
+        thumbnail: Base64Image;
+        progress: number;
+        goal: number;
+    } & {
+        onClick?: () => void;
+    }
+) {
     return (
         <Card className="hover:shadow-lg transition-shadow mb-4">
             <CardContent className="p-4 flex items-start gap-4">
+                {/* TODO: thumbnail would probably be too small */}
                 {/* Image placeholder on the left */}
                 <div className="w-16 h-16 bg-gray-200 flex-shrink-0 relative">
                     {/* Diagonal lines to match Figma design */}
@@ -58,18 +52,18 @@ function ProjectCard({
 
                 {/* Content on the right */}
                 <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-start mb-2">
+                    <div className="mb-2">
                         <CardTitle
                             className="text-base font-semibold cursor-pointer hover:text-blue-600 transition-colors"
-                            onClick={onClick}
+                            onClick={project.onClick}
                         >
-                            {title}
+                            {project.name}
                         </CardTitle>
-                        <div className="text-xs text-gray-400">view</div>
+                        <Badge>{project.category}</Badge>
                     </div>
 
                     <p className="text-sm text-gray-600 leading-relaxed mb-3 line-clamp-2">
-                        {description}
+                        {project.description}
                     </p>
 
                     {/* Progress Bar */}
@@ -77,13 +71,13 @@ function ProjectCard({
                         <div className="flex justify-between items-center text-xs">
                             <span className="text-gray-500">Progress</span>
                             <span className="text-gray-600 font-medium">
-                                {progress}%
+                                {project.progress}%
                             </span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                             <div
                                 className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                                style={{ width: `${progress}%` }}
+                                style={{ width: `${project.progress}%` }}
                             ></div>
                         </div>
                     </div>
@@ -93,116 +87,143 @@ function ProjectCard({
     );
 }
 
+// Sample project data
+export const projects: Project[] = [
+    {
+        id: "proj-001",
+        name: "Community Garden",
+        description: "Build and maintain a garden in the local park.",
+        category: "Environment",
+        dateStarted: "2024-03-01",
+        dateCompleted: undefined,
+        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+        progress: 30,
+        goal: 100,
+        contact: "garden@community.org",
+        citizenContributions: {
+            "4c8f6d82-e4c6-4478-92eb-d9342500f006": 50,
+            "7884a866-4ae1-4945-9fba-b2b8d2b7c5a9": 20
+        },
+        businessDonations: [
+            {
+                donor: "f0ab14ef-6cdc-4c1e-ae52-04de6c844dbc",
+                equipment: "Shovel",
+                estimatedValue: 50
+            },
+            {
+                donor: "7c09e008-a836-4607-9c59-6336a07368c0",
+                equipment: "Seeds",
+                estimatedValue: 5
+            }
+        ]
+    },
+    {
+        id: "proj-002",
+        name: "Art Mural",
+        description: "Create a mural for the city center wall.",
+        category: "Art",
+        dateStarted: "2024-05-18",
+        dateCompleted: undefined,
+        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+        progress: 70,
+        goal: 100,
+        contact: "art@city.org",
+        citizenContributions: {
+            "ce93ac0e-aade-423e-94f4-85cd33a15dbb": 60,
+            "8fd03d6b-b1d6-4dc0-8985-b7c9f3115089": 10
+        },
+        businessDonations: [
+            {
+                donor: "a9adff1f-b61b-493d-9c47-9e4ea62e3ae7",
+                equipment: "Paint",
+                estimatedValue: 20
+            }
+        ]
+    },
+    {
+        id: "proj-003",
+        name: "Tech Workshop",
+        description: "Teach programming basics to youth.",
+        category: "Education",
+        dateStarted: "2024-07-01",
+        dateCompleted: undefined,
+        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+        progress: 45,
+        goal: 100,
+        contact: "tech@workshop.org",
+        citizenContributions: {
+            "c8eea5d1-2a3b-499b-9aee-555760ba0cf9": 30
+        },
+        businessDonations: [
+            {
+                donor: "aab8614f-94d6-4e4e-b9d5-00deae751184",
+                equipment: "Laptops",
+                estimatedValue: 10
+            }
+        ]
+    },
+    {
+        id: "proj-004",
+        name: "Street Clean-Up",
+        description: "Monthly clean-up of major streets.",
+        category: "Community Service",
+        dateStarted: "2024-04-10",
+        dateCompleted: "2024-08-05",
+        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+        progress: 100,
+        goal: 100,
+        contact: "cleanup@community.org",
+        citizenContributions: {
+            "2ccab30f-80bf-4b33-9918-b374f7e9dd4e": 25,
+            "af8cc079-71e8-45ed-9bfe-9445174dc231": 40
+        },
+        businessDonations: [
+            {
+                donor: "5f830f6c-1cca-4276-8db3-9d8de320fba0",
+                equipment: "Gloves",
+                estimatedValue: 50
+            }
+        ]
+    },
+    {
+        id: "proj-005",
+        name: "Solar Panel Installation",
+        description: "Equip the library with solar panels.",
+        category: "Sustainability",
+        dateStarted: "2024-02-19",
+        dateCompleted: undefined,
+        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+        progress: 60,
+        goal: 100,
+        contact: "solar@city.org",
+        citizenContributions: {
+            "30358007-5b19-47b8-979f-5b8afaae1e44": 35,
+            "ddf30d9e-0865-48d8-88ed-648c28710853": 15
+        },
+        businessDonations: [
+            {
+                donor: "16f27f95-5b85-4d54-9905-0fdaa036b0a8",
+                equipment: "Solar Panels",
+                estimatedValue: 10
+            }
+        ]
+    }
+] as const;
+
 export default function Project() {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("category");
     const navigate = useNavigate();
 
-    // Sample project data organized by columns
-    const projectColumns = [
-        {
-            category: "category header",
-            projects: [
-                {
-                    id: 1,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                    progress: 85,
-                    category: "Category",
-                    totalGoal: "XXXXXXXX out of XXXX",
-                    activeDays: "XXX Active Days"
-                },
-                {
-                    id: 2,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 60
-                },
-                {
-                    id: 3,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 92
-                },
-                {
-                    id: 4,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 45
-                }
-            ]
-        },
-        {
-            category: "category header",
-            projects: [
-                {
-                    id: 5,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 78
-                },
-                {
-                    id: 6,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 30
-                },
-                {
-                    id: 7,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 65
-                },
-                {
-                    id: 8,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 88
-                }
-            ]
-        },
-        {
-            category: "category header",
-            projects: [
-                {
-                    id: 9,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 55
-                },
-                {
-                    id: 10,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 95
-                },
-                {
-                    id: 11,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 40
-                },
-                {
-                    id: 12,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 72
-                }
-            ]
-        }
-    ];
+    const filteredProjects = useMemo(() => {
+        const lowerQuery = searchQuery.toLowerCase();
+        return projects.filter(
+            (p) =>
+                p.name.toLowerCase().includes(lowerQuery) ||
+                p.description.toLowerCase().includes(lowerQuery) ||
+                p.category.toLowerCase().includes(lowerQuery)
+        );
+    }, [searchQuery, projects]);
 
     const categories = ["category", "category", "category"];
 
@@ -211,11 +232,9 @@ export default function Project() {
     };
 
     return (
-        <div className="flex-1 bg-gray-50">
-            {/* Main Content Area */}
+        <main className="flex-1 bg-gray-50">
             <div className="flex-1 p-6">
-                {/* Header Section */}
-                <div className="mb-6">
+                <header className="mb-6">
                     <h1 className="text-2xl font-bold mb-4">Projects</h1>
 
                     {/* Search and Filter Bar */}
@@ -233,7 +252,7 @@ export default function Project() {
 
                         {/* Filter Button */}
                         <Button variant="outline" size="default">
-                            <Filter className="w-4 h-4" />
+                            <Filter className="w-4 h-4" color="white" />
                         </Button>
                     </div>
 
@@ -259,35 +278,20 @@ export default function Project() {
                             </Button>
                         ))}
                     </div>
-                </div>
+                </header>
 
                 {/* Projects Grid with Category Headers */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {projectColumns.map((column, columnIndex) => (
-                        <div key={columnIndex} className="space-y-4">
-                            {/* Category Header */}
-                            <div className="bg-gray-300 text-gray-700 text-sm font-medium p-3 rounded">
-                                {column.category}
-                            </div>
-
-                            {/* Projects in this column */}
-                            <div className="space-y-4">
-                                {column.projects.map((project) => (
-                                    <ProjectCard
-                                        key={project.id}
-                                        title={project.title}
-                                        description={project.description}
-                                        progress={project.progress}
-                                        onClick={() =>
-                                            handleProjectClick(project)
-                                        }
-                                    />
-                                ))}
-                            </div>
+                    {filteredProjects.map((project) => (
+                        <div className="space-y-4">
+                            <ProjectCard
+                                onClick={() => handleProjectClick(project)}
+                                {...project}
+                            />
                         </div>
                     ))}
                 </div>
             </div>
-        </div>
+        </main>
     );
 }

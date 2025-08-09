@@ -1,56 +1,59 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { ArrowLeft } from "lucide-react";
-
-interface ProjectDetailData {
-    id: number;
-    title: string;
-    category: string;
-    description: string;
-    progress: number;
-    totalGoal: string;
-    activeDays: string;
-}
+import type { Project } from "../types";
+import { daysSince } from "../lib/utils";
 
 export default function ProjectDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
 
     // Sample project data - in a real app, this would come from an API
-    const projectData: ProjectDetailData = {
-        id: parseInt(id || "1"),
-        title: "Project Title",
-        category: "Category",
-        description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        progress: 85,
-        totalGoal: "XXXXXXXX out of XXXX",
-        activeDays: "XXX Active Days"
-    };
-
-    const handleBack = () => {
-        navigate("/project");
+    const projectData: Project = {
+        id: id ?? "proj-001",
+        name: "Community Garden",
+        description: "Build and maintain a garden in the local park.",
+        category: "Environment",
+        dateStarted: "2024-03-01",
+        dateCompleted: undefined,
+        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+        progress: 30,
+        goal: 100,
+        contact: "garden@community.org",
+        citizenContributions: {
+            "4c8f6d82-e4c6-4478-92eb-d9342500f006": 50,
+            "7884a866-4ae1-4945-9fba-b2b8d2b7c5a9": 20
+        },
+        businessDonations: [
+            {
+                donor: "f0ab14ef-6cdc-4c1e-ae52-04de6c844dbc",
+                equipment: "Shovel",
+                estimatedValue: 50
+            },
+            {
+                donor: "7c09e008-a836-4607-9c59-6336a07368c0",
+                equipment: "Seeds",
+                estimatedValue: 5
+            }
+        ]
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 w-full">
             <div className="flex-1 p-6">
                 {/* Back Button */}
-                <div className="mb-6">
-                    <Button
-                        variant="outline"
-                        onClick={handleBack}
-                        className="flex items-center gap-2"
-                    >
-                        <ArrowLeft className="w-4 h-4" />
-                        Back to Projects
-                    </Button>
-                </div>
+                <Button
+                    onClick={() => navigate("/project")}
+                    className="flex items-center gap-2 text-white mb-4"
+                >
+                    <ArrowLeft className="w-4 h-4" />
+                    Back to Projects
+                </Button>
 
                 {/* Title and Category */}
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                        {projectData.title}
+                        {projectData.name}
                     </h1>
                     <div className="text-base text-gray-600">
                         {projectData.category}
@@ -87,12 +90,18 @@ export default function ProjectDetail() {
                     </div>
 
                     {/* Right side - Stats */}
-                    <div className="space-y-8">
+                    <div>
                         {/* Progress Bar */}
-                        <div className="space-y-3">
-                            <div className="w-full bg-gray-200 rounded-full h-4">
+                        <div className="mb-3">
+                            <div className="flex justify-between items-center">
+                                <span className="text-gray-500">Progress</span>
+                                <span className="text-gray-600 font-medium">
+                                    {projectData.progress}%
+                                </span>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-2">
                                 <div
-                                    className="bg-gray-400 h-4 rounded-full"
+                                    className="bg-blue-500 h-2 rounded-full transition-all duration-300"
                                     style={{
                                         width: `${projectData.progress}%`
                                     }}
@@ -103,26 +112,26 @@ export default function ProjectDetail() {
                         {/* Stats */}
                         <div className="space-y-6">
                             <div className="flex justify-between items-center py-3 border-b border-gray-200">
-                                <span className="text-xl font-bold text-gray-900">
-                                    {projectData.totalGoal}
+                                <span className="text-xl text-gray-500">
+                                    {projectData.progress} out of {projectData.goal}
                                 </span>
                             </div>
 
                             <div className="flex justify-between items-center py-3 border-b border-gray-200">
                                 <span className="text-lg text-gray-700">
-                                    XXXXXX
+                                    {Object.keys(projectData.citizenContributions).length}
                                 </span>
                                 <span className="text-base text-gray-500">
-                                    Goals Reached
+                                    Contributors
                                 </span>
                             </div>
 
                             <div className="flex justify-between items-center py-3 border-b border-gray-200">
                                 <span className="text-lg text-gray-700">
-                                    XXX
+                                    {daysSince(projectData.dateStarted)}
                                 </span>
                                 <span className="text-base text-gray-500">
-                                    {projectData.activeDays}
+                                    Active days
                                 </span>
                             </div>
                         </div>

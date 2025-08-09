@@ -121,10 +121,9 @@ export default function Profile() {
                             <p>{profileData.email}</p>
                             <button
                                 onClick={handleEditClick}
-                                className="text-gray-600 hover:text-gray-800 transition-colors p-1"
                                 title="Edit Profile"
                             >
-                                <Edit2 className="w-5 h-5" />
+                                <Edit2 className="w-5 h-5" color="white" />
                             </button>
                         </div>
                     </div>
@@ -383,12 +382,7 @@ export default function Profile() {
 
                     {/* Save Button */}
                     <div className="flex justify-center py-8 border-t-4 border-blue-500 bg-blue-50 mt-6">
-                        <Button
-                            onClick={handleSaveChanges}
-                            className="px-12 py-4 bg-red-500 hover:bg-red-600 text-black font-bold text-xl rounded-lg shadow-lg border-2 border-red-700"
-                        >
-                            SAVE
-                        </Button>
+                        <Button onClick={handleSaveChanges}>Save</Button>
                     </div>
                 </div>
             </Modal>
