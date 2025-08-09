@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./App.css";
-import { LoginForm } from "./pages/login";
-import { RegisterForm } from "./pages/register";
+import { LoginForm } from "./pages/Login.tsx";
+import { RegisterForm } from "./pages/Register.tsx";
 
 function App() {
     const [currentPage, setCurrentPage] = useState<"login" | "register">(
