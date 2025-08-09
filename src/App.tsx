@@ -1,4 +1,4 @@
-import { useState, createContext } from "react";
+import { useState } from "react";
 import "./App.css";
 import { LoginForm } from "./pages/login";
 import { RegisterForm } from "./pages/register";
@@ -6,12 +6,11 @@ import Project from "./pages/Project";
 import Profile from "./pages/Profile";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
+import { AppContext } from "./lib/AppContext";
 import type { Context } from "./types";
 
-export const AppContext = createContext<Context | null>(null);
-
 function App() {
-    const [context] = useState<Context>({
+    const [context, setContext] = useState<Context>({
         user: null,
     });
 

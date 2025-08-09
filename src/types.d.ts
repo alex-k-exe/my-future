@@ -1,5 +1,6 @@
 export type Base64Image = string;
 export type UUID = `${string}-${string}-${string}-${string}-${string}`;
+export type ProjectId = string;
 
 export interface User {
     uuid: UUID; // PK
@@ -12,6 +13,7 @@ export interface User {
     birthdate: string;
     address: string;
     pfp: Base64Image;
+    contributedTo: ProjectId[];
 }
 
 export interface EquipmentDonation {
@@ -21,15 +23,17 @@ export interface EquipmentDonation {
 }
 
 export interface Project {
-    id: string; // PK
+    id: ProjectId; // PK
     name: string;
     description: string;
+    category: string;
     dateStarted: string;
     dateCompleted?: string;
     thumbnail: Base64Image;
     progress: number;
     goal: number;
     contact: string;
+    citizenContributions: Record<UUID, number>;
     businessDonations: EquipmentDonation[];
 }
 
