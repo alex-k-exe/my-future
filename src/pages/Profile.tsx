@@ -90,7 +90,7 @@ export default function Profile() {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-100 p-6">
+        <div className="flex-1 bg-gray-100 p-6">
             {/* Header */}
             <div className="mb-6">
                 <h1 className="text-2xl font-bold text-gray-900">My Profile</h1>

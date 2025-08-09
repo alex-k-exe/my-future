@@ -211,84 +211,83 @@ export default function Project() {
     };
 
     return (
-    <div className="flex-1 bg-gray-50">
-                {/* Main Content Area */}
-                <div className="flex-1 p-6">
-                    {/* Header Section */}
-                    <div className="mb-6">
-                        <h1 className="text-2xl font-bold mb-4">Projects</h1>
+        <div className="flex-1 bg-gray-50">
+            {/* Main Content Area */}
+            <div className="flex-1 p-6">
+                {/* Header Section */}
+                <div className="mb-6">
+                    <h1 className="text-2xl font-bold mb-4">Projects</h1>
 
-                        {/* Search and Filter Bar */}
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="relative flex-1">
-                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                                <Input
-                                    type="text"
-                                    placeholder="Search projects..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="pl-10"
-                                />
-                            </div>
-
-                            {/* Filter Button */}
-                            <Button variant="outline" size="default">
-                                <Filter className="w-4 h-4" />
-                            </Button>
+                    {/* Search and Filter Bar */}
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="relative flex-1">
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                            <Input
+                                type="text"
+                                placeholder="Search projects..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="pl-10"
+                            />
                         </div>
 
-                        {/* Category Buttons */}
-                        <div className="flex items-center gap-3">
-                            {categories.map((category, index) => (
-                                <Button
-                                    key={index}
-                                    variant={
-                                        selectedCategory === category
-                                            ? "default"
-                                            : "outline"
-                                    }
-                                    size="sm"
-                                    onClick={() => setSelectedCategory(category)}
-                                    className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                                        selectedCategory === category
-                                            ? "bg-red-500 text-blue-500 hover:bg-red-600"
-                                            : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                                    }`}
-                                >
-                                    {category}
-                                </Button>
-                            ))}
-                        </div>
+                        {/* Filter Button */}
+                        <Button variant="outline" size="default">
+                            <Filter className="w-4 h-4" />
+                        </Button>
                     </div>
 
-                    {/* Projects Grid with Category Headers */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {projectColumns.map((column, columnIndex) => (
-                            <div key={columnIndex} className="space-y-4">
-                                {/* Category Header */}
-                                <div className="bg-gray-300 text-gray-700 text-sm font-medium p-3 rounded">
-                                    {column.category}
-                                </div>
-
-                                {/* Projects in this column */}
-                                <div className="space-y-4">
-                                    {column.projects.map((project) => (
-                                        <ProjectCard
-                                            key={project.id}
-                                            title={project.title}
-                                            description={project.description}
-                                            progress={project.progress}
-                                            onClick={() =>
-                                                handleProjectClick(project)
-                                            }
-                                        />
-                                    ))}
-                                </div>
-                            </div>
+                    {/* Category Buttons */}
+                    <div className="flex items-center gap-3">
+                        {categories.map((category, index) => (
+                            <Button
+                                key={index}
+                                variant={
+                                    selectedCategory === category
+                                        ? "default"
+                                        : "outline"
+                                }
+                                size="sm"
+                                onClick={() => setSelectedCategory(category)}
+                                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                                    selectedCategory === category
+                                        ? "bg-red-500 text-blue-500 hover:bg-red-600"
+                                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                                }`}
+                            >
+                                {category}
+                            </Button>
                         ))}
                     </div>
                 </div>
-            </div>
 
+                {/* Projects Grid with Category Headers */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {projectColumns.map((column, columnIndex) => (
+                        <div key={columnIndex} className="space-y-4">
+                            {/* Category Header */}
+                            <div className="bg-gray-300 text-gray-700 text-sm font-medium p-3 rounded">
+                                {column.category}
+                            </div>
+
+                            {/* Projects in this column */}
+                            <div className="space-y-4">
+                                {column.projects.map((project) => (
+                                    <ProjectCard
+                                        key={project.id}
+                                        title={project.title}
+                                        description={project.description}
+                                        progress={project.progress}
+                                        onClick={() =>
+                                            handleProjectClick(project)
+                                        }
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
     );
 }
