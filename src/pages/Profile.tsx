@@ -8,7 +8,7 @@ import { Label } from "../components/ui/label";
 export default function Profile() {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [profileData, setProfileData] = useState({
-        fullName: "Full Name",
+        fullName: "Alex ALex",
         firstName: "Full",
         lastName: "Name",
         status: "Citizen",
@@ -75,31 +75,31 @@ export default function Profile() {
     const pastProjects = [
         {
             id: 1,
-            title: "Project Title",
+            title: "Newstead Solar Farm",
             description:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
+                "Adding new solar panels to Newstead's tallest new..."
         },
         {
             id: 2,
-            title: "Project Title",
+            title: "Upgrade Victoria Park",
             description:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
         },
         {
             id: 3,
-            title: "Project Title",
+            title: "Add street lights to Party Street",
             description:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
         }
     ];
 
-
+    /*
     useEffect( () => {
         const token = localStorage.getItem("token");
 
 
         const fetchProfile = async () => {
-        const url = `http://localhost:3000/user/@me`;
+        const url = `https://my-future-backend.onrender.com/users/@me`;
 
 
         const res = await fetch(url, {
@@ -107,13 +107,15 @@ export default function Profile() {
           Cookie: `${token}`
         }
         });
+        
 
-    const json = await res.json();
-    console.log("Fetched Profile JSON:", json); 
-    setProfileData(json);
+        const json = await res.json();
+        console.log("Fetched Profile JSON:", json); 
+        setProfileData(json);
     }
-    })
-
+    fetchProfile();
+    }, [])
+    */
     return (
         <div className="flex-1 bg-gray-100 p-6">
             {/* Header */}
