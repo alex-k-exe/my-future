@@ -14,13 +14,9 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { loadImageFromUrl } from "../lib/utils";
 
-
-
 interface RegisterFormProps extends ComponentPropsWithoutRef<"div"> {
     onBackToLogin?: () => void;
 }
-
-
 
 export function RegisterForm({
     className,
@@ -37,15 +33,18 @@ export function RegisterForm({
     const [address2, setAddress2] = useState("");
     const [accountImage, setAccountImage] = useState<File | null>(null);
 
-
     useEffect(() => {
         (async () => {
-            setAccountImage(await loadImageFromUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/510px-Default_pfp.svg.png?20220226140232", "pfp.png"));
+            setAccountImage(
+                await loadImageFromUrl(
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/510px-Default_pfp.svg.png?20220226140232",
+                    "pfp.png"
+                )
+            );
         })();
     }, []);
 
     const navigate = useNavigate();
-
 
     // Toku's previous handler
     /*
@@ -71,7 +70,7 @@ export function RegisterForm({
             const reader = new FileReader();
             reader.readAsDataURL(file); // this creates a base64 data URL
             reader.onload = () => resolve(reader.result as string);
-            reader.onerror = error => reject(error);
+            reader.onerror = (error) => reject(error);
         });
     };
 
@@ -106,7 +105,6 @@ export function RegisterForm({
             alert("Registration successful");
             navigate("/"); // Redirect to home
             // Redirect
-            
         } catch (err) {
             console.error("Registration error:", err);
             alert("An error occurred. Please try again.");

@@ -1,11 +1,230 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardTitle } from "../components/ui/card";
-import { Search, Filter, ArrowDownNarrowWide, Plus, Edit } from "lucide-react";
+import {
+    Search,
+    Filter,
+    ArrowDownNarrowWide,
+    Plus,
+    Edit,
+    X
+} from "lucide-react";
 import type { Base64Image, Project, ProjectId } from "../types";
 import { Badge } from "../components/ui/badge";
 import { Link } from "react-router-dom";
+
+// プロジェクトフォームの型定義
+interface ProjectFormData {
+    name: string;
+    description: string;
+    category: string;
+    thumbnail: string;
+    progress: number;
+    contact: string;
+}
+
+// プロジェクト追加・編集モーダルコンポーネント
+function ProjectModal({
+    isOpen,
+    onClose,
+    onSubmit,
+    project = null,
+    mode
+}: {
+    isOpen: boolean;
+    onClose: () => void;
+    onSubmit: (data: ProjectFormData) => void;
+    project?: Project | null;
+    mode: "add" | "edit";
+}) {
+    const [formData, setFormData] = useState<ProjectFormData>({
+        name: "",
+        description: "",
+        category: "",
+        thumbnail: "",
+        progress: 0,
+        contact: ""
+    });
+
+    // projectプロパティが変更されるたびにformDataを更新
+    useEffect(() => {
+        if (project && mode === "edit") {
+            setFormData({
+                name: project.name || "",
+                description: project.description || "",
+                category: project.category || "",
+                thumbnail: project.thumbnail || "",
+                progress: project.progress || 0,
+                contact: project.contact || ""
+            });
+        } else if (mode === "add") {
+            // 新規追加時はフォームをリセット
+            setFormData({
+                name: "",
+                description: "",
+                category: "",
+                thumbnail: "",
+                progress: 0,
+                contact: ""
+            });
+        }
+    }, [project, mode]);
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        onSubmit(formData);
+        onClose();
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-bold">
+                        {mode === "add" ? "Add New Project" : "Edit Project"}
+                    </h2>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={onClose}
+                        className="p-1 h-8 w-8"
+                    >
+                        <X className="h-4 w-4" />
+                    </Button>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Project Name
+                        </label>
+                        <Input
+                            value={formData.name}
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    name: e.target.value
+                                })
+                            }
+                            placeholder="Enter project name"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Description
+                        </label>
+                        <textarea
+                            value={formData.description}
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    description: e.target.value
+                                })
+                            }
+                            placeholder="Enter project description"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            rows={3}
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Category
+                        </label>
+                        <Input
+                            value={formData.category}
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    category: e.target.value
+                                })
+                            }
+                            placeholder="Enter category"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Thumbnail (Base64 or URL)
+                        </label>
+                        <Input
+                            value={formData.thumbnail}
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    thumbnail: e.target.value
+                                })
+                            }
+                            placeholder="Enter thumbnail URL or base64 data"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Progress (%)
+                        </label>
+                        <Input
+                            type="number"
+                            min="0"
+                            max="100"
+                            value={formData.progress}
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    progress: parseInt(e.target.value) || 0
+                                })
+                            }
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Contact Email
+                        </label>
+                        <Input
+                            type="email"
+                            value={formData.contact}
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    contact: e.target.value
+                                })
+                            }
+                            placeholder="Enter contact email"
+                            required
+                        />
+                    </div>
+
+                    <div className="flex gap-3 pt-4">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={onClose}
+                            className="flex-1"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="submit"
+                            className="flex-1 bg-black text-white hover:bg-gray-800"
+                        >
+                            {mode === "add" ? "Add Project" : "Save Changes"}
+                        </Button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+}
 
 function ProjectCard(props: {
     id: ProjectId;
@@ -16,6 +235,7 @@ function ProjectCard(props: {
     progress: number;
     goal: number;
     showAdminButtons: boolean;
+    onEdit: (project: Project) => void;
 }) {
     const {
         id,
@@ -25,8 +245,26 @@ function ProjectCard(props: {
         thumbnail,
         progress,
         goal,
-        showAdminButtons
+        showAdminButtons,
+        onEdit
     } = props;
+
+    // プロジェクトデータを再構築
+    const projectData: Project = {
+        id,
+        name,
+        description,
+        category,
+        thumbnail,
+        progress,
+        goal,
+        dateStarted: new Date().toISOString().split("T")[0],
+        dateCompleted: undefined,
+        contact: "",
+        citizenContributions: {},
+        businessDonations: []
+    };
+
     return (
         <Link to={"/project/" + id}>
             <div className="bg-white border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer rounded-none">
@@ -53,8 +291,7 @@ function ProjectCard(props: {
                                     onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
-                                        // TODO: Add edit functionality
-                                        console.log("Edit project:", id);
+                                        onEdit(projectData);
                                     }}
                                 >
                                     <Edit className="h-4 w-4 text-gray-600" />
@@ -120,7 +357,7 @@ export const projects: Project[] = [
         },
         businessDonations: [
             {
-                donor: "f0ab14ef-6cdc-4c1e-ae52-04de6c844dbc",
+                donor: "f0ab14ef-6cdc-4e1e-ae52-04de6c844dbc",
                 equipment: "Shovel",
                 estimatedValue: 50
             },
@@ -161,7 +398,7 @@ export const projects: Project[] = [
         category: "Education",
         dateStarted: "2024-07-01",
         dateCompleted: undefined,
-        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+        thumbnail: "data:image/png;base64;iVBORw0KGgoAAAANSUhEUgAA...",
         progress: 45,
         goal: 100,
         contact: "tech@workshop.org",
@@ -183,7 +420,7 @@ export const projects: Project[] = [
         category: "Community Service",
         dateStarted: "2024-04-10",
         dateCompleted: "2024-08-05",
-        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+        thumbnail: "data:image/png;base64;iVBORw0KGgoAAAANSUhEUgAA...",
         progress: 100,
         goal: 100,
         contact: "cleanup@community.org",
@@ -193,20 +430,20 @@ export const projects: Project[] = [
         },
         businessDonations: [
             {
-                donor: "5f830f6c-1cca-4276-8db3-9d8de320fba0",
-                equipment: "Gloves",
-                estimatedValue: 50
+                donor: "f0ab14ef-6cdc-4e1e-ae52-04de6c844dbc",
+                equipment: "Garbage Bags",
+                estimatedValue: 15
             }
         ]
     },
     {
         id: "proj-005",
         name: "Solar Panel Installation",
-        description: "Equip the library with solar panels.",
-        category: "Sustainability",
-        dateStarted: "2024-02-19",
+        description: "Install solar panels on city buildings.",
+        category: "Renewable Energy",
+        dateStarted: "2024-06-15",
         dateCompleted: undefined,
-        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+        thumbnail: "data:image/png;base64;iVBORw0KGgoAAAANSUhEUgAA...",
         progress: 60,
         goal: 100,
         contact: "solar@city.org",
@@ -227,16 +464,73 @@ export const projects: Project[] = [
 export default function Project() {
     const [searchQuery, setSearchQuery] = useState("");
     const [showAdminButtons, setShowAdminButtons] = useState(true);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [selectedProjectToEdit, setSelectedProjectToEdit] =
+        useState<Project | null>(null);
+    const [projectsList, setProjectsList] = useState<Project[]>([...projects]);
 
     const filteredProjects = useMemo(() => {
         const lowerQuery = searchQuery.toLowerCase();
-        return projects.filter(
+        return projectsList.filter(
             (p) =>
                 p.name.toLowerCase().includes(lowerQuery) ||
                 p.description.toLowerCase().includes(lowerQuery) ||
                 p.category.toLowerCase().includes(lowerQuery)
         );
-    }, [searchQuery, projects]);
+    }, [searchQuery, projectsList]);
+
+    const handleAddProject = (data: ProjectFormData) => {
+        const newProject: Project = {
+            id: `proj-${Date.now()}`, // 自動ID生成
+            name: data.name,
+            description: data.description,
+            category: data.category,
+            dateStarted: new Date().toISOString().split("T")[0], // 自動で現在の日付をセット
+            dateCompleted: undefined,
+            thumbnail: data.thumbnail,
+            progress: data.progress,
+            goal: 100, // デフォルト値
+            contact: data.contact,
+            citizenContributions: {},
+            businessDonations: []
+        };
+
+        // プロジェクトリストに新しいプロジェクトを追加
+        setProjectsList((prev) => [...prev, newProject]);
+        console.log("Adding new project:", newProject);
+        setIsAddModalOpen(false);
+    };
+
+    const handleEditProject = (project: Project) => {
+        setSelectedProjectToEdit(project);
+        setIsEditModalOpen(true);
+    };
+
+    const handleSaveEditedProject = (data: ProjectFormData) => {
+        if (!selectedProjectToEdit) return;
+
+        const updatedProject: Project = {
+            ...selectedProjectToEdit,
+            name: data.name,
+            description: data.description,
+            category: data.category,
+            thumbnail: data.thumbnail,
+            progress: data.progress,
+            contact: data.contact
+        };
+
+        // プロジェクトリストを更新
+        setProjectsList((prev) =>
+            prev.map((p) =>
+                p.id === selectedProjectToEdit.id ? updatedProject : p
+            )
+        );
+
+        console.log("Saving edited project:", updatedProject);
+        setIsEditModalOpen(false);
+        setSelectedProjectToEdit(null);
+    };
 
     return (
         <main className="flex-1 bg-gray-50">
@@ -263,10 +557,7 @@ export default function Project() {
                             {showAdminButtons && (
                                 <Button
                                     className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded"
-                                    onClick={() => {
-                                        // TODO: Add new project functionality
-                                        console.log("Add new project");
-                                    }}
+                                    onClick={() => setIsAddModalOpen(true)}
                                 >
                                     <Plus className="h-4 w-4 mr-2" />
                                     Add
@@ -299,10 +590,26 @@ export default function Project() {
                             key={project.id}
                             {...project}
                             showAdminButtons={showAdminButtons}
+                            onEdit={handleEditProject}
                         />
                     ))}
                 </div>
             </div>
+
+            <ProjectModal
+                isOpen={isAddModalOpen}
+                onClose={() => setIsAddModalOpen(false)}
+                onSubmit={handleAddProject}
+                mode="add"
+            />
+
+            <ProjectModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                onSubmit={handleSaveEditedProject}
+                project={selectedProjectToEdit}
+                mode="edit"
+            />
         </main>
     );
 }
