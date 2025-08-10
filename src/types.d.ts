@@ -7,7 +7,7 @@ export interface User {
     email: string;
     points: number;
     name: string;
-    accountType: "citizen" | "business" | "government";
+    accountType: "citizen" | "government";
     password: string;
     address: string;
     pfp: Base64Image;
@@ -15,7 +15,7 @@ export interface User {
 }
 
 export interface EquipmentDonation {
-    donor: UUID;
+    donor: string; // Business name
     equipment: string;
     estimatedValue: number;
 }

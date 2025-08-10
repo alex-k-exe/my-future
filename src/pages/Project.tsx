@@ -1,8 +1,8 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardTitle } from "../components/ui/card";
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, ArrowDownNarrowWide, Edit, Plus, X } from "lucide-react";
 import type { Base64Image, Project, ProjectId } from "../types";
 import { Badge } from "../components/ui/badge";
 import { Link } from "react-router-dom";
@@ -21,7 +21,227 @@ import {
     SelectValue
 } from "../components/ui/select";
 
-function ProjectCard(project: {
+// プロジェクトフォームの型定義
+interface ProjectFormData {
+    name: string;
+    description: string;
+    category: string;
+    thumbnail: string;
+    progress: number;
+    contact: string;
+}
+
+// プロジェクト追加・編集モーダルコンポーネント
+function ProjectModal({
+    isOpen,
+    onClose,
+    onSubmit,
+    project = null,
+    mode
+}: {
+    isOpen: boolean;
+    onClose: () => void;
+    onSubmit: (data: ProjectFormData) => void;
+    project?: Project | null;
+    mode: "add" | "edit";
+}) {
+    const [formData, setFormData] = useState<ProjectFormData>({
+        name: "",
+        description: "",
+        category: "",
+        thumbnail: "",
+        progress: 0,
+        contact: ""
+    });
+
+    // projectプロパティが変更されるたびにformDataを更新
+    useEffect(() => {
+        if (project && mode === "edit") {
+            setFormData({
+                name: project.name || "",
+                description: project.description || "",
+                category: project.category || "",
+                thumbnail: project.thumbnail || "",
+                progress: project.progress || 0,
+                contact: project.contact || ""
+            });
+        } else if (mode === "add") {
+            // 新規追加時はフォームをリセット
+            setFormData({
+                name: "",
+                description: "",
+                category: "",
+                thumbnail: "",
+                progress: 0,
+                contact: ""
+            });
+        }
+    }, [project, mode]);
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        onSubmit(formData);
+        onClose();
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-none w-full max-w-md max-h-[90vh] flex flex-col">
+                <div className="flex justify-between items-center p-6 pb-4 border-b">
+                    <h2 className="text-xl font-bold">
+                        {mode === "add" ? "Add New Project" : "Edit Project"}
+                    </h2>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={onClose}
+                        className="p-1 h-8 w-8"
+                    >
+                        <X className="h-4 w-4" />
+                    </Button>
+                </div>
+
+                <form
+                    id="project-form"
+                    onSubmit={handleSubmit}
+                    className="flex-1 overflow-y-auto p-6 pt-4 space-y-4"
+                >
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Project Name
+                        </label>
+                        <Input
+                            value={formData.name}
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    name: e.target.value
+                                })
+                            }
+                            placeholder="Enter project name"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Description
+                        </label>
+                        <textarea
+                            value={formData.description}
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    description: e.target.value
+                                })
+                            }
+                            placeholder="Enter project description"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            rows={3}
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Category
+                        </label>
+                        <Input
+                            value={formData.category}
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    category: e.target.value
+                                })
+                            }
+                            placeholder="Enter category"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Thumbnail (Base64 or URL)
+                        </label>
+                        <Input
+                            value={formData.thumbnail}
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    thumbnail: e.target.value
+                                })
+                            }
+                            placeholder="Enter thumbnail URL or base64 data"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Progress (%)
+                        </label>
+                        <Input
+                            type="number"
+                            min="0"
+                            max="100"
+                            value={formData.progress}
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    progress: parseInt(e.target.value) || 0
+                                })
+                            }
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Contact Email
+                        </label>
+                        <Input
+                            type="email"
+                            value={formData.contact}
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    contact: e.target.value
+                                })
+                            }
+                            placeholder="Enter contact email"
+                            required
+                        />
+                    </div>
+                </form>
+
+                {/* Fixed button area at bottom */}
+                <div className="p-6 pt-0 border-t bg-gray-50">
+                    <div className="flex gap-3">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={onClose}
+                            className="flex-1"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="submit"
+                            form="project-form"
+                            className="flex-1 bg-black text-white hover:bg-gray-800"
+                        >
+                            {mode === "add" ? "Add Project" : "Save Changes"}
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function ProjectCard(props: {
     id: ProjectId;
     name: string;
     description: string;
@@ -29,69 +249,101 @@ function ProjectCard(project: {
     thumbnail: Base64Image;
     progress: number;
     goal: number;
+    showAdminButtons: boolean;
+    onEdit: (project: Project) => void;
 }) {
+    const {
+        id,
+        name,
+        description,
+        category,
+        thumbnail,
+        progress,
+        goal,
+        showAdminButtons,
+        onEdit
+    } = props;
+
+    // プロジェクトデータを再構築
+    const projectData: Project = {
+        id,
+        name,
+        description,
+        category,
+        thumbnail,
+        progress,
+        goal,
+        dateStarted: new Date(),
+        dateCompleted: undefined,
+        contact: "",
+        citizenContributions: {},
+        businessDonations: []
+    };
+
     return (
-        <Link to={"/project/" + project.id}>
-            <Card className="hover:shadow-lg transition-shadow mb-4">
-                <CardContent className="p-4 flex items-start gap-4">
-                    {/* TODO: thumbnail would probably be too small */}
-                    {/* Image placeholder on the left */}
-                    <div className="w-16 h-16 bg-gray-200 flex-shrink-0 relative">
-                        {/* Diagonal lines to match Figma design */}
-                        <svg
-                            className="w-full h-full opacity-50"
-                            viewBox="0 0 64 64"
-                        >
-                            <line
-                                x1="16"
-                                y1="16"
-                                x2="48"
-                                y2="48"
-                                stroke="gray"
-                                strokeWidth="1"
-                            />
-                            <line
-                                x1="16"
-                                y1="48"
-                                x2="48"
-                                y2="16"
-                                stroke="gray"
-                                strokeWidth="1"
-                            />
-                        </svg>
+        <Link to={"/project/" + id}>
+            <div className="bg-white border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer rounded-none">
+                {/* Image placeholder on top */}
+                <div className="w-full h-36 bg-gray-400 flex items-center justify-center">
+                    <span className="text-black font-medium">Image</span>
+                </div>
+
+                {/* Content below image */}
+                <div className="p-4 flex flex-col h-full">
+                    {/* Top content area */}
+                    <div className="flex-1 space-y-3">
+                        {/* Title and Edit Button */}
+                        <div className="flex justify-between items-start">
+                            <h3 className="text-lg font-semibold text-black flex-1">
+                                {name}
+                            </h3>
+                            {/* Admin Edit Button */}
+                            {showAdminButtons && (
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="ml-2 p-1 h-8 w-8 hover:bg-gray-100"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        onEdit(projectData);
+                                    }}
+                                >
+                                    <Edit className="h-4 w-4 text-gray-600" />
+                                </Button>
+                            )}
+                        </div>
+                        <div className="flex place-content-start">
+                            <Badge className="mb-4">{category}</Badge>
+                        </div>
+                        {/* Description */}
+                        <p className="text-sm text-black leading-relaxed">
+                            {description}
+                        </p>
                     </div>
 
-                    {/* Content on the right */}
-                    <div className="flex-1 min-w-0">
-                        <div className="mb-2">
-                            <CardTitle className="text-base font-semibold">
-                                {project.name}
-                            </CardTitle>
-                            <Badge>{project.category}</Badge>
-                        </div>
-
-                        <p className="text-sm text-gray-500 leading-relaxed mb-3 line-clamp-2">
-                            {project.description}
-                        </p>
-
+                    {/* Bottom content area - fixed at bottom */}
+                    <div className="mt-4 space-y-3">
                         {/* Progress Bar */}
-                        <div className="space-y-1">
-                            <div className="flex justify-between items-center text-xs">
-                                <span className="text-gray-500">Progress</span>
-                                <span className="text-gray-500 font-medium">
-                                    {project.progress}%
+                        <div className="space-y-2">
+                            <div className="flex justify-between items-center text-sm">
+                                <span className="text-black">Progress</span>
+                                <span className="text-black font-medium">
+                                    {progress}%
                                 </span>
                             </div>
-                            <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div className="w-full bg-gray-300 rounded-full h-2">
                                 <div
                                     className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                                    style={{ width: `${project.progress}%` }}
+                                    style={{
+                                        width: `${progress}%`
+                                    }}
                                 ></div>
                             </div>
                         </div>
                     </div>
-                </CardContent>
-            </Card>
+                </div>
+            </div>
         </Link>
     );
 }
@@ -101,7 +353,7 @@ export const projects: Project[] = [
     {
         id: "proj-001",
         name: "Community Garden",
-        description: "Build and maintain a garden in the local park.",
+        description: "Build a garden in the local park.",
         category: "Environment",
         dateStarted: new Date("2024-03-01"),
         dateCompleted: undefined,
@@ -115,7 +367,7 @@ export const projects: Project[] = [
         },
         businessDonations: [
             {
-                donor: "f0ab14ef-6cdc-4c1e-ae52-04de6c844dbc",
+                donor: "f0ab14ef-6cdc-4e1e-ae52-04de6c844dbc",
                 equipment: "Shovel",
                 estimatedValue: 50
             },
@@ -156,7 +408,7 @@ export const projects: Project[] = [
         category: "Education",
         dateStarted: new Date("2024-07-01"),
         dateCompleted: undefined,
-        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+        thumbnail: "data:image/png;base64;iVBORw0KGgoAAAANSUhEUgAA...",
         progress: 45,
         goal: 100,
         contact: "tech@workshop.org",
@@ -188,9 +440,9 @@ export const projects: Project[] = [
         },
         businessDonations: [
             {
-                donor: "5f830f6c-1cca-4276-8db3-9d8de320fba0",
-                equipment: "Gloves",
-                estimatedValue: 50
+                donor: "f0ab14ef-6cdc-4e1e-ae52-04de6c844dbc",
+                equipment: "Garbage Bags",
+                estimatedValue: 15
             }
         ]
     },
@@ -201,7 +453,7 @@ export const projects: Project[] = [
         category: "Sustainability",
         dateStarted: new Date("2024-02-19"),
         dateCompleted: undefined,
-        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+        thumbnail: "data:image/png;base64;iVBORw0KGgoAAAANSUhEUgAA...",
         progress: 60,
         goal: 100,
         contact: "solar@city.org",
@@ -221,81 +473,122 @@ export const projects: Project[] = [
 
 export default function Project() {
     const [searchQuery, setSearchQuery] = useState("");
+    const [showAdminButtons, setShowAdminButtons] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [selectedProjectToEdit, setSelectedProjectToEdit] = useState<Project | null>(null);
 
-    let [afterDate, setAfterDate] = useState<Date | undefined>();
-    let [beforeDate, setBeforeDate] = useState<Date | undefined>();
-    const [categories, setCategories] = useState(
-        Array.from(new Set(projects.map((p) => p.category))).map(
-            (category) => ({
-                category,
-                selected: true
-            })
-        )
-    );
-    let [projectStatus, setProjectStatus] = useState<
-        "completed" | "notCompleted" | "both"
-    >("notCompleted");
+    // Filter states
+    const [afterDate, setAfterDate] = useState<Date | undefined>(undefined);
+    const [beforeDate, setBeforeDate] = useState<Date | undefined>(undefined);
+    const [categories, setCategories] = useState<{ category: string; selected: boolean }[]>([]);
+    const [projectStatus, setProjectStatus] = useState<"completed" | "notCompleted" | "both">("both");
 
-    function resetFilters() {
-        setAfterDate(undefined);
-        setBeforeDate(undefined);
-        setCategories(
-            categories.map((category) => {
-                return { category: category.category, selected: true };
-            })
-        );
-        setProjectStatus("notCompleted");
-    }
-
+    // Filter logic
     const filteredProjects = useMemo(() => {
         const lowerQuery = searchQuery.toLowerCase();
+        return projects.filter((p) => {
+            // Search filter
+            const matchesSearch =
+                p.name.toLowerCase().includes(lowerQuery) ||
+                p.description.toLowerCase().includes(lowerQuery) ||
+                p.category.toLowerCase().includes(lowerQuery);
 
-        return projects.filter((project) => {
-            const projectIncludesQuery =
-                project.name.toLowerCase().includes(lowerQuery) ||
-                project.description.toLowerCase().includes(lowerQuery) ||
-                project.category.toLowerCase().includes(lowerQuery);
-            const startDateInRange =
-                (!afterDate || project.dateStarted >= afterDate) &&
-                (!beforeDate || project.dateStarted <= beforeDate);
-            const categorySelected =
-                categories.find(
-                    (category) => project.category === category.category
-                )?.selected ?? true;
-            let correctProjectStatus: boolean;
-            if (projectStatus === "completed") {
-                correctProjectStatus =
-                    project.dateCompleted !== undefined ||
-                    project.progress === project.goal;
-            } else if (projectStatus === "notCompleted") {
-                correctProjectStatus =
-                    project.dateCompleted === undefined &&
-                    project.progress < project.goal;
-            } else {
-                correctProjectStatus = true;
+            // Date filter
+            let matchesDate = true;
+            if (afterDate) {
+                const startDate = typeof p.dateStarted === "string" ? new Date(p.dateStarted) : p.dateStarted;
+                matchesDate = startDate >= afterDate;
+            }
+            if (beforeDate) {
+                const startDate = typeof p.dateStarted === "string" ? new Date(p.dateStarted) : p.dateStarted;
+                matchesDate = matchesDate && startDate <= beforeDate;
             }
 
-            return (
-                projectIncludesQuery &&
-                startDateInRange &&
-                categorySelected &&
-                correctProjectStatus
-            );
+            // Category filter
+            const selectedCategories = categories.filter(c => c.selected).map(c => c.category);
+            const matchesCategory =
+                selectedCategories.length === 0 || selectedCategories.includes(p.category);
+
+            // Status filter
+            let matchesStatus = true;
+            if (projectStatus === "completed") {
+                matchesStatus = !!p.dateCompleted;
+            } else if (projectStatus === "notCompleted") {
+                matchesStatus = !p.dateCompleted;
+            }
+
+            return matchesSearch && matchesDate && matchesCategory && matchesStatus;
         });
-    }, [
-        searchQuery,
-        categories,
-        afterDate,
-        beforeDate,
-        projectStatus,
-        projects
-    ]);
+    }, [searchQuery, afterDate, beforeDate, categories, projectStatus]);
+
+    // Collect all categories for MultiSelect
+    const allCategories = useMemo(() => {
+        const set = new Set<string>();
+        projects.forEach((p) => set.add(p.category));
+        return Array.from(set).map((category) => ({
+            category,
+            selected: false
+        }));
+    }, []);
+
+    // Modal handlers
+    const handleAddProject = (data: any) => {
+        // Add project logic here (e.g. API call or local state update)
+        setIsAddModalOpen(false);
+    };
+
+    const handleEditProject = (project: Project) => {
+        setSelectedProjectToEdit(project);
+        setIsEditModalOpen(true);
+    };
+
+    const handleSaveEditedProject = (data: any) => {
+        // Save edited project logic here
+        setIsEditModalOpen(false);
+        setSelectedProjectToEdit(null);
+    };
+
+    const resetFilters = () => {
+        setAfterDate(undefined);
+        setBeforeDate(undefined);
+        setCategories([]);
+        setProjectStatus("both");
+    };
 
     return (
         <main className="flex-1 bg-gray-50">
             <div className="flex-1 p-6">
                 <header className="mb-6">
-                    <h1 className="text-2xl font-bold mb-4">Projects</h1>
+                    <div className="flex justify-between items-center mb-4">
+                        <h1 className="text-2xl font-bold">Projects</h1>
+                        <div className="flex items-center gap-3">
+                            {/* Switch Test Button */}
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                    setShowAdminButtons(!showAdminButtons);
+                                    console.log(
+                                        "Switch Test clicked, showAdminButtons:",
+                                        !showAdminButtons
+                                    );
+                                }}
+                            >
+                                Switch Test
+                            </Button>
+                            {/* Admin Add Button */}
+                            {showAdminButtons && (
+                                <Button
+                                    className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded"
+                                    onClick={() => setIsAddModalOpen(true)}
+                                >
+                                    <Plus className="h-4 w-4 mr-2" />
+                                    Add
+                                </Button>
+                            )}
+                        </div>
+                    </div>
 
                     {/* Search and Filter Bar */}
                     <div className="flex items-center gap-3 mb-6">
@@ -319,14 +612,13 @@ export default function Project() {
                                 <Button onClick={resetFilters} className="mb-3">Reset</Button>
                                 <DatePicker
                                     label="From"
-                                    date={afterDate}
+                                    date={afterDate ?? undefined}
                                     setDate={setAfterDate}
                                 />
                                 <DatePicker
                                     label="To"
-                                    date={beforeDate}
-                                    setDate={setBeforeDate}
-                                />
+                                    date={beforeDate ?? undefined}
+                                    setDate={setBeforeDate}/>
                                 <MultiSelect
                                     categories={categories}
                                     setCategories={setCategories}
@@ -363,10 +655,30 @@ export default function Project() {
                 </header>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredProjects.map((project) => (
-                        <ProjectCard {...project} />
+                        <ProjectCard
+                            key={project.id}
+                            {...project}
+                            showAdminButtons={showAdminButtons}
+                            onEdit={handleEditProject}
+                        />
                     ))}
                 </div>
             </div>
+
+            <ProjectModal
+                isOpen={isAddModalOpen}
+                onClose={() => setIsAddModalOpen(false)}
+                onSubmit={handleAddProject}
+                mode="add"
+            />
+
+            <ProjectModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                onSubmit={handleSaveEditedProject}
+                project={selectedProjectToEdit}
+                mode="edit"
+            />
         </main>
     );
 }

@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef } from "react";
+import type { ComponentPropsWithoutRef, FormEvent } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "../lib/utils";
@@ -13,6 +13,10 @@ import {
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 
+// Example placeholders — adjust to your actual imports
+// import { login } from "../auth";
+// import { useNavigate } from "react-router-dom";
+
 interface LoginFormProps extends ComponentPropsWithoutRef<"div"> {
     onShowRegister?: () => void;
 }
@@ -24,12 +28,40 @@ export function LoginForm({
 }: LoginFormProps) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loginMessage, setLoginMessage] = useState("");
+
+    // const navigate = useNavigate();
     const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        console.log("Login attempted with:", { email, password });
-        // Add your login logic here
+        try {
+            const response = await fetch("http://localhost:3000/user/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                const jwt = data.bearerToken.token;
+                const refresh = data.refreshToken.token;
+
+                // login({ email, token: jwt, refreshToken: refresh });
+                // navigate("/");
+
+                setLoginMessage("Login successful!");
+            } else {
+                setLoginMessage(
+                    data.message || "Login failed. Please try again."
+                );
+            }
+        } catch (error) {
+            setLoginMessage("An error occurred. Please try again.");
+        }
     };
 
     return (
@@ -102,7 +134,7 @@ export function LoginForm({
                                 Don&apos;t have an account?{" "}
                                 <button
                                     type="button"
-                                    onClick={() => navigate("/register")}
+                                    onClick={onShowRegister}
                                     className="underline underline-offset-4 hover:text-primary"
                                 >
                                     Sign up

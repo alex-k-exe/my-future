@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "../lib/utils";
 import { Button } from "../components/ui/button";
@@ -12,6 +12,7 @@ import {
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
+import { loadImageFromUrl } from "../lib/utils";
 
 interface RegisterFormProps extends ComponentPropsWithoutRef<"div"> {
     onBackToLogin?: () => void;
@@ -31,8 +32,22 @@ export function RegisterForm({
     const [address1, setAddress1] = useState("");
     const [address2, setAddress2] = useState("");
     const [accountImage, setAccountImage] = useState<File | null>(null);
+
+    useEffect(() => {
+        (async () => {
+            setAccountImage(
+                await loadImageFromUrl(
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/510px-Default_pfp.svg.png?20220226140232",
+                    "pfp.png"
+                )
+            );
+        })();
+    }, []);
+
     const navigate = useNavigate();
 
+    // Toku's previous handler
+    /*
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         console.log("Register attempted with:", {
@@ -47,6 +62,53 @@ export function RegisterForm({
             accountImage: accountImage?.name
         });
         // Add your registration logic here
+    };
+    */
+
+    const fileToBase64 = (file: File) => {
+        return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file); // this creates a base64 data URL
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = (error) => reject(error);
+        });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (password !== confirmPassword) {
+            alert("Passwords do not match");
+            return;
+        }
+
+        try {
+            const res = await fetch("http://localhost:3000/auth/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email,
+                    name: `${firstName} ${lastName}`,
+                    accountType,
+                    password,
+                    address: `${address1}, ${address2}`,
+                    pfp: await fileToBase64(accountImage!!)
+                })
+            });
+
+            if (!res.ok) {
+                const error = await res.json();
+                alert(error.message || "Registration failed");
+                return;
+            }
+
+            alert("Registration successful");
+            navigate("/"); // Redirect to home
+            // Redirect
+        } catch (err) {
+            console.error("Registration error:", err);
+            alert("An error occurred. Please try again.");
+        }
     };
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -179,14 +241,8 @@ export function RegisterForm({
                                             <option value="">
                                                 Select account type
                                             </option>
-                                            <option value="personal">
-                                                Personal
-                                            </option>
-                                            <option value="business">
-                                                Business
-                                            </option>
-                                            <option value="premium">
-                                                Premium
+                                            <option value="citizen">
+                                                Citizen
                                             </option>
                                         </select>
                                     </div>
