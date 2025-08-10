@@ -1,5 +1,6 @@
 import type { ComponentPropsWithoutRef } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { cn } from "../lib/utils";
 import { Button } from "../components/ui/button";
 import {
@@ -11,6 +12,7 @@ import {
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
+import { loadImageFromUrl } from "../lib/utils";
 
 
 
@@ -34,7 +36,7 @@ export function RegisterForm({
     const [address1, setAddress1] = useState("");
     const [address2, setAddress2] = useState("");
     const [accountImage, setAccountImage] = useState<File | null>(null);
-    const navigate = useNavigate();
+
 
     useEffect(() => {
         (async () => {
