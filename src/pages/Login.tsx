@@ -13,9 +13,7 @@ import {
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 
-// Example placeholders — adjust to your actual imports
-// import { login } from "../auth";
-// import { useNavigate } from "react-router-dom";
+
 
 interface LoginFormProps extends ComponentPropsWithoutRef<"div"> {
     onShowRegister?: () => void;
@@ -30,13 +28,12 @@ export function LoginForm({
     const [password, setPassword] = useState("");
     const [loginMessage, setLoginMessage] = useState("");
 
-    // const navigate = useNavigate();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
-            const response = await fetch("http://localhost:3000/user/login", {
+            const response = await fetch("https://my-future-backend.onrender.com/auth/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -47,11 +44,12 @@ export function LoginForm({
             const data = await response.json();
 
             if (response.ok) {
-                const jwt = data.bearerToken.token;
-                const refresh = data.refreshToken.token;
+                const jwt = data.token;
+                console.log(jwt);
+                //const refresh = data.refreshToken.token;
+                localStorage.setItem('token', jwt);
 
-                // login({ email, token: jwt, refreshToken: refresh });
-                // navigate("/");
+                navigate("/");
 
                 setLoginMessage("Login successful!");
             } else {

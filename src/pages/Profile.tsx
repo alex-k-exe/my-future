@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { User, Edit2 } from "lucide-react";
 import { Modal } from "../components/ui/modal";
 import { Button } from "../components/ui/button";
@@ -92,6 +92,27 @@ export default function Profile() {
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
         }
     ];
+
+
+    useEffect( () => {
+        const token = localStorage.getItem("token");
+
+
+        const fetchProfile = async () => {
+        const url = `http://localhost:3000/user/@me`;
+
+
+        const res = await fetch(url, {
+            headers: {
+          Cookie: `${token}`
+        }
+        });
+
+    const json = await res.json();
+    console.log("Fetched Profile JSON:", json); 
+    setProfileData(json);
+    }
+    })
 
     return (
         <div className="flex-1 bg-gray-100 p-6">
@@ -337,9 +358,7 @@ export default function Profile() {
                                     <option value="">
                                         Select account type
                                     </option>
-                                    <option value="Personal">Personal</option>
-                                    <option value="Business">Business</option>
-                                    <option value="Premium">Premium</option>
+                                    <option value="Personal">Citizen</option>
                                 </select>
                             </div>
 
