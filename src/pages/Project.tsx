@@ -14,7 +14,7 @@ import type { Base64Image, Project, ProjectId } from "../types";
 import { Badge } from "../components/ui/badge";
 import { Link } from "react-router-dom";
 
-// プロジェクトフォームの型定義
+// Project form data type definition
 interface ProjectFormData {
     name: string;
     description: string;
@@ -24,7 +24,7 @@ interface ProjectFormData {
     contact: string;
 }
 
-// プロジェクト追加・編集モーダルコンポーネント
+// Project add/edit modal component
 function ProjectModal({
     isOpen,
     onClose,
@@ -47,7 +47,7 @@ function ProjectModal({
         contact: ""
     });
 
-    // projectプロパティが変更されるたびにformDataを更新
+    // Update formData whenever the project property changes
     useEffect(() => {
         if (project && mode === "edit") {
             setFormData({
@@ -59,7 +59,7 @@ function ProjectModal({
                 contact: project.contact || ""
             });
         } else if (mode === "add") {
-            // 新規追加時はフォームをリセット
+            // Reset form when adding new project
             setFormData({
                 name: "",
                 description: "",
@@ -257,7 +257,7 @@ function ProjectCard(props: {
         onEdit
     } = props;
 
-    // プロジェクトデータを再構築
+    // Reconstruct project data
     const projectData: Project = {
         id,
         name,
@@ -485,21 +485,21 @@ export default function Project() {
 
     const handleAddProject = (data: ProjectFormData) => {
         const newProject: Project = {
-            id: `proj-${Date.now()}`, // 自動ID生成
+            id: `proj-${Date.now()}`, // Auto-generate ID
             name: data.name,
             description: data.description,
             category: data.category,
-            dateStarted: new Date().toISOString().split("T")[0], // 自動で現在の日付をセット
+            dateStarted: new Date().toISOString().split("T")[0], // Auto-set current date
             dateCompleted: undefined,
             thumbnail: data.thumbnail,
             progress: data.progress,
-            goal: 100, // デフォルト値
+            goal: 100, // Default value
             contact: data.contact,
             citizenContributions: {},
             businessDonations: []
         };
 
-        // プロジェクトリストに新しいプロジェクトを追加
+        // Add new project to project list
         setProjectsList((prev) => [...prev, newProject]);
         console.log("Adding new project:", newProject);
         setIsAddModalOpen(false);
@@ -523,7 +523,7 @@ export default function Project() {
             contact: data.contact
         };
 
-        // プロジェクトリストを更新
+        // Update project list
         setProjectsList((prev) =>
             prev.map((p) =>
                 p.id === selectedProjectToEdit.id ? updatedProject : p
