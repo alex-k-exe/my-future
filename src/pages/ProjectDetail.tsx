@@ -18,8 +18,7 @@ export default function ProjectDetail() {
         name: "Loading...",
         description: "Loading...",
         category: "Loading...",
-        dateStarted: "",
-        dateCompleted: "",
+        dateStarted: new Date(),
         thumbnail: "",
         progress: 0,
         goal: 0,
@@ -40,14 +39,14 @@ export default function ProjectDetail() {
                         name: "Project Not Found",
                         description: "No description available.",
                         category: "Unknown",
-                        dateStarted: new Date().toISOString(),
+                        dateStarted: new Date(),
                         thumbnail: "",
                         progress: 0,
                         goal: 100,
                         contact: "N/A",
                         businessDonations: []
                     }
-                })))
+                })));
         })();
     }, [id]);
 
@@ -71,6 +70,7 @@ export default function ProjectDetail() {
                     <div className="text-base text-gray-600">
                         {projectData.category}
                     </div>
+                    <br/>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -78,27 +78,28 @@ export default function ProjectDetail() {
                     <div className="space-y-4">
                         <div className="w-full h-80 bg-gray-200 rounded-lg flex items-center justify-center relative">
                             {/* Diagonal lines placeholder like in the image */}
-                            <svg
-                                className="w-full h-full opacity-30"
-                                viewBox="0 0 400 300"
-                            >
-                                <line
-                                    x1="50"
-                                    y1="50"
-                                    x2="350"
-                                    y2="250"
-                                    stroke="gray"
-                                    strokeWidth="2"
-                                />
-                                <line
-                                    x1="50"
-                                    y1="250"
-                                    x2="350"
-                                    y2="50"
-                                    stroke="gray"
-                                    strokeWidth="2"
-                                />
-                            </svg>
+                            <img src={projectData.thumbnail}></img>
+                            {/*<svg*/}
+                            {/*    className="w-full h-full opacity-30"*/}
+                            {/*    viewBox="0 0 400 300"*/}
+                            {/*>*/}
+                            {/*    <line*/}
+                            {/*        x1="50"*/}
+                            {/*        y1="50"*/}
+                            {/*        x2="350"*/}
+                            {/*        y2="250"*/}
+                            {/*        stroke="gray"*/}
+                            {/*        strokeWidth="2"*/}
+                            {/*    />*/}
+                            {/*    <line*/}
+                            {/*        x1="50"*/}
+                            {/*        y1="250"*/}
+                            {/*        x2="350"*/}
+                            {/*        y2="50"*/}
+                            {/*        stroke="gray"*/}
+                            {/*        strokeWidth="2"*/}
+                            {/*    />*/}
+                            {/*</svg>*/}
                         </div>
                     </div>
 
