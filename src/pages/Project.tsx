@@ -2,10 +2,24 @@ import { useMemo, useState } from "react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardTitle } from "../components/ui/card";
-import { Search, Filter, ArrowDownNarrowWide } from "lucide-react";
+import { Search, Filter } from "lucide-react";
 import type { Base64Image, Project, ProjectId } from "../types";
 import { Badge } from "../components/ui/badge";
 import { Link } from "react-router-dom";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger
+} from "../components/ui/popover";
+import DatePicker from "../components/ui/datePicker";
+import { MultiSelect } from "../components/ui/mutliselect";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "../components/ui/select";
 
 function ProjectCard(project: {
     id: ProjectId;
@@ -89,7 +103,7 @@ export const projects: Project[] = [
         name: "Community Garden",
         description: "Build and maintain a garden in the local park.",
         category: "Environment",
-        dateStarted: "2024-03-01",
+        dateStarted: new Date("2024-03-01"),
         dateCompleted: undefined,
         thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
         progress: 30,
@@ -117,7 +131,7 @@ export const projects: Project[] = [
         name: "Art Mural",
         description: "Create a mural for the city center wall.",
         category: "Art",
-        dateStarted: "2024-05-18",
+        dateStarted: new Date("2024-05-18"),
         dateCompleted: undefined,
         thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
         progress: 70,
@@ -140,7 +154,7 @@ export const projects: Project[] = [
         name: "Tech Workshop",
         description: "Teach programming basics to youth.",
         category: "Education",
-        dateStarted: "2024-07-01",
+        dateStarted: new Date("2024-07-01"),
         dateCompleted: undefined,
         thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
         progress: 45,
@@ -162,8 +176,8 @@ export const projects: Project[] = [
         name: "Street Clean-Up",
         description: "Monthly clean-up of major streets.",
         category: "Community Service",
-        dateStarted: "2024-04-10",
-        dateCompleted: "2024-08-05",
+        dateStarted: new Date("2024-04-10"),
+        dateCompleted: new Date("2024-08-05"),
         thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
         progress: 100,
         goal: 100,
@@ -185,7 +199,7 @@ export const projects: Project[] = [
         name: "Solar Panel Installation",
         description: "Equip the library with solar panels.",
         category: "Sustainability",
-        dateStarted: "2024-02-19",
+        dateStarted: new Date("2024-02-19"),
         dateCompleted: undefined,
         thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
         progress: 60,
@@ -208,15 +222,74 @@ export const projects: Project[] = [
 export default function Project() {
     const [searchQuery, setSearchQuery] = useState("");
 
+    let [afterDate, setAfterDate] = useState<Date | undefined>();
+    let [beforeDate, setBeforeDate] = useState<Date | undefined>();
+    const [categories, setCategories] = useState(
+        Array.from(new Set(projects.map((p) => p.category))).map(
+            (category) => ({
+                category,
+                selected: true
+            })
+        )
+    );
+    let [projectStatus, setProjectStatus] = useState<
+        "completed" | "notCompleted" | "both"
+    >("notCompleted");
+
+    function resetFilters() {
+        setAfterDate(undefined);
+        setBeforeDate(undefined);
+        setCategories(
+            categories.map((category) => {
+                return { category: category.category, selected: true };
+            })
+        );
+        setProjectStatus("notCompleted");
+    }
+
     const filteredProjects = useMemo(() => {
         const lowerQuery = searchQuery.toLowerCase();
-        return projects.filter(
-            (p) =>
-                p.name.toLowerCase().includes(lowerQuery) ||
-                p.description.toLowerCase().includes(lowerQuery) ||
-                p.category.toLowerCase().includes(lowerQuery)
-        );
-    }, [searchQuery, projects]);
+
+        return projects.filter((project) => {
+            const projectIncludesQuery =
+                project.name.toLowerCase().includes(lowerQuery) ||
+                project.description.toLowerCase().includes(lowerQuery) ||
+                project.category.toLowerCase().includes(lowerQuery);
+            const startDateInRange =
+                (!afterDate || project.dateStarted >= afterDate) &&
+                (!beforeDate || project.dateStarted <= beforeDate);
+            const categorySelected =
+                categories.find(
+                    (category) => project.category === category.category
+                )?.selected ?? true;
+            let correctProjectStatus: boolean;
+            if (projectStatus === "completed") {
+                correctProjectStatus =
+                    project.dateCompleted !== undefined ||
+                    project.progress === project.goal;
+            } else if (projectStatus === "notCompleted") {
+                correctProjectStatus =
+                    project.dateCompleted === undefined &&
+                    project.progress < project.goal;
+            } else {
+                correctProjectStatus = true;
+            }
+
+            return (
+                projectIncludesQuery &&
+                startDateInRange &&
+                categorySelected &&
+                correctProjectStatus
+            );
+        });
+    }, [
+        searchQuery,
+        categories,
+        afterDate,
+        beforeDate,
+        projectStatus,
+        projects
+    ]);
 
     return (
         <main className="flex-1 bg-gray-50">
@@ -236,10 +309,56 @@ export default function Project() {
                                 className="pl-10"
                             />
                         </div>
-                        {/* Filter Button */}
-                        <Button>
-                            <Filter />
-                        </Button>
+                        <Popover>
+                            <PopoverTrigger>
+                                <Button>
+                                    <Filter />
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent collisionPadding={8}>
+                                <Button onClick={resetFilters} className="mb-3">Reset</Button>
+                                <DatePicker
+                                    label="From"
+                                    date={afterDate}
+                                    setDate={setAfterDate}
+                                />
+                                <DatePicker
+                                    label="To"
+                                    date={beforeDate}
+                                    setDate={setBeforeDate}
+                                />
+                                <MultiSelect
+                                    categories={categories}
+                                    setCategories={setCategories}
+                                />
+                                <Select
+                                    value={projectStatus}
+                                    onValueChange={(value) =>
+                                        setProjectStatus(
+                                            value as
+                                                | "completed"
+                                                | "notCompleted"
+                                                | "both"
+                                        )
+                                    }
+                                >
+                                    <SelectTrigger className="w-[180px] mt-3">
+                                        <SelectValue placeholder="Project status" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="both">
+                                            Both
+                                        </SelectItem>
+                                        <SelectItem value="notCompleted">
+                                            Not completed
+                                        </SelectItem>
+                                        <SelectItem value="completed">
+                                            Completed
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </PopoverContent>
+                        </Popover>
                     </div>
                 </header>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
