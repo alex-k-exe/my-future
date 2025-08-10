@@ -3,40 +3,53 @@ import { Button } from "../components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import type { Project } from "../types";
 import { formatDate } from "../lib/utils";
+import {useContext, useEffect, useState} from "react";
+import {AppContext} from "../lib/AppContext.ts";
 
 export default function ProjectDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    // Sample project data - in a real app, this would come from an API
-    const projectData: Project = {
-        id: id ?? "proj-001",
-        name: "Community Garden",
-        description: "Build and maintain a garden in the local park.",
-        category: "Environment",
-        dateStarted: "2024-03-01",
-        dateCompleted: undefined,
-        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
-        progress: 30,
-        goal: 100,
-        contact: "garden@community.org",
-        citizenContributions: {
-            "4c8f6d82-e4c6-4478-92eb-d9342500f006": 50,
-            "7884a866-4ae1-4945-9fba-b2b8d2b7c5a9": 20
-        },
-        businessDonations: [
-            {
-                donor: "f0ab14ef-6cdc-4c1e-ae52-04de6c844dbc",
-                equipment: "Shovel",
-                estimatedValue: 50
-            },
-            {
-                donor: "7c09e008-a836-4607-9c59-6336a07368c0",
-                equipment: "Seeds",
-                estimatedValue: 5
-            }
-        ]
-    };
+    const appContext = useContext(AppContext)
+
+    // set to loading state
+    const [projectData, setProjectData] = useState({
+        id: "",
+        name: "Loading...",
+        description: "Loading...",
+        category: "Loading...",
+        dateStarted: "",
+        dateCompleted: "",
+        thumbnail: "",
+        progress: 0,
+        goal: 0,
+        contact: "",
+        businessDonations: []
+    } as Project);
+
+    useEffect(() => {
+        (async () => {
+            setProjectData(
+                (await appContext.fetchApiPublic(`/projects/${id}`)
+                .then(response => response.json())
+                .then(response => response.project as Project)
+                .catch(error => {
+                    console.error("Error fetching project data:", error);
+                    return {
+                        id: id || "",
+                        name: "Project Not Found",
+                        description: "No description available.",
+                        category: "Unknown",
+                        dateStarted: new Date().toISOString(),
+                        thumbnail: "",
+                        progress: 0,
+                        goal: 100,
+                        contact: "N/A",
+                        businessDonations: []
+                    }
+                })))
+        })();
+    }, [id]);
 
     return (
         <div className="min-h-screen bg-gray-50 w-full">
@@ -121,9 +134,9 @@ export default function ProjectDetail() {
                             <div className="flex justify-between items-center py-3 border-b border-gray-200">
                                 <span className="text-lg text-gray-700">
                                     {
-                                        Object.keys(
-                                            projectData.citizenContributions
-                                        ).length
+                                        // Object.keys(
+                                        //     projectData.citizenContributions
+                                        // ).length
                                     }
                                 </span>
                                 <span className="text-base text-gray-500">

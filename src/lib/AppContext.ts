@@ -14,5 +14,8 @@ export const AppContext = createContext({
                 Cookie: `token=${token}`
             }
         });
+    },
+    fetchApiPublic: async (endpoint: `/${string}`): Promise<Response> => {
+        return fetch(`https://my-future-backend.onrender.com${endpoint}`);
     }
 } as Context);
