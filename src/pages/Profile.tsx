@@ -93,26 +93,23 @@ export default function Profile() {
         }
     ];
 
-
-    useEffect( () => {
+    useEffect(() => {
         const token = localStorage.getItem("token");
 
-
         const fetchProfile = async () => {
-        const url = `http://localhost:3000/user/@me`;
+            const url = `http://localhost:3000/user/@me`;
 
+            const res = await fetch(url, {
+                headers: {
+                    Cookie: `${token}`
+                }
+            });
 
-        const res = await fetch(url, {
-            headers: {
-          Cookie: `${token}`
-        }
-        });
-
-    const json = await res.json();
-    console.log("Fetched Profile JSON:", json); 
-    setProfileData(json);
-    }
-    })
+            const json = await res.json();
+            console.log("Fetched Profile JSON:", json);
+            setProfileData(json);
+        };
+    });
 
     return (
         <div className="flex-1 bg-gray-100 p-6">

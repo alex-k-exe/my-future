@@ -13,8 +13,6 @@ import {
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 
-
-
 interface LoginFormProps extends ComponentPropsWithoutRef<"div"> {
     onShowRegister?: () => void;
 }
@@ -33,13 +31,16 @@ export function LoginForm({
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
-            const response = await fetch("https://my-future-backend.onrender.com/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ email, password })
-            });
+            const response = await fetch(
+                "https://my-future-backend.onrender.com/auth/login",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ email, password })
+                }
+            );
 
             const data = await response.json();
 
@@ -47,7 +48,7 @@ export function LoginForm({
                 const jwt = data.token;
                 console.log(jwt);
                 //const refresh = data.refreshToken.token;
-                localStorage.setItem('token', jwt);
+                localStorage.setItem("token", jwt);
 
                 navigate("/");
 

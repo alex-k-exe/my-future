@@ -21,7 +21,7 @@ import {
     SelectValue
 } from "../components/ui/select";
 
-// プロジェクトフォームの型定義
+// Project form data type definition
 interface ProjectFormData {
     name: string;
     description: string;
@@ -31,7 +31,7 @@ interface ProjectFormData {
     contact: string;
 }
 
-// プロジェクト追加・編集モーダルコンポーネント
+// Project add/edit modal component
 function ProjectModal({
     isOpen,
     onClose,
@@ -54,7 +54,7 @@ function ProjectModal({
         contact: ""
     });
 
-    // projectプロパティが変更されるたびにformDataを更新
+    // Update formData whenever the project property changes
     useEffect(() => {
         if (project && mode === "edit") {
             setFormData({
@@ -66,7 +66,7 @@ function ProjectModal({
                 contact: project.contact || ""
             });
         } else if (mode === "add") {
-            // 新規追加時はフォームをリセット
+            // Reset form when adding new project
             setFormData({
                 name: "",
                 description: "",
@@ -264,7 +264,7 @@ function ProjectCard(props: {
         onEdit
     } = props;
 
-    // プロジェクトデータを再構築
+    // Reconstruct project data
     const projectData: Project = {
         id,
         name,
@@ -349,7 +349,7 @@ function ProjectCard(props: {
 }
 
 // Sample project data
-export const projects: Project[] = [
+const initialProjects: Project[] = [
     {
         id: "proj-001",
         name: "Community Garden",
@@ -469,9 +469,10 @@ export const projects: Project[] = [
             }
         ]
     }
-] as const;
+];
 
 export default function Project() {
+    const [projectsList, setProjectsList] = useState<Project[]>(initialProjects);
     const [searchQuery, setSearchQuery] = useState("");
     const [showAdminButtons, setShowAdminButtons] = useState(false);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -487,7 +488,7 @@ export default function Project() {
     // Filter logic
     const filteredProjects = useMemo(() => {
         const lowerQuery = searchQuery.toLowerCase();
-        return projects.filter((p) => {
+        return projectsList.filter((p) => {
             // Search filter
             const matchesSearch =
                 p.name.toLowerCase().includes(lowerQuery) ||
@@ -520,21 +521,37 @@ export default function Project() {
 
             return matchesSearch && matchesDate && matchesCategory && matchesStatus;
         });
-    }, [searchQuery, afterDate, beforeDate, categories, projectStatus]);
+    }, [projectsList, searchQuery, afterDate, beforeDate, categories, projectStatus]);
 
     // Collect all categories for MultiSelect
     const allCategories = useMemo(() => {
         const set = new Set<string>();
-        projects.forEach((p) => set.add(p.category));
+        projectsList.forEach((p) => set.add(p.category));
         return Array.from(set).map((category) => ({
             category,
             selected: false
         }));
     }, []);
 
-    // Modal handlers
-    const handleAddProject = (data: any) => {
-        // Add project logic here (e.g. API call or local state update)
+    const handleAddProject = (data: ProjectFormData) => {
+        const newProject: Project = {
+            id: `proj-${Date.now()}`, // Auto-generate ID
+            name: data.name,
+            description: data.description,
+            category: data.category,
+            dateStarted: new Date(), // Auto-set current date
+            dateCompleted: undefined,
+            thumbnail: data.thumbnail,
+            progress: data.progress,
+            goal: 100, // Default value
+            contact: data.contact,
+            citizenContributions: {},
+            businessDonations: []
+        };
+
+        // Add new project to project list
+        setProjectsList((prev) => [...prev, newProject]);
+        console.log("Adding new project:", newProject);
         setIsAddModalOpen(false);
     };
 
@@ -543,8 +560,27 @@ export default function Project() {
         setIsEditModalOpen(true);
     };
 
-    const handleSaveEditedProject = (data: any) => {
-        // Save edited project logic here
+    const handleSaveEditedProject = (data: ProjectFormData) => {
+        if (!selectedProjectToEdit) return;
+
+        const updatedProject: Project = {
+            ...selectedProjectToEdit,
+            name: data.name,
+            description: data.description,
+            category: data.category,
+            thumbnail: data.thumbnail,
+            progress: data.progress,
+            contact: data.contact
+        };
+
+        // Update project list
+        setProjectsList((prev) =>
+            prev.map((p) =>
+                p.id === selectedProjectToEdit.id ? updatedProject : p
+            )
+        );
+
+        console.log("Saving edited project:", updatedProject);
         setIsEditModalOpen(false);
         setSelectedProjectToEdit(null);
     };
