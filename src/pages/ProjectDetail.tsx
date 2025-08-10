@@ -145,6 +145,18 @@ export default function ProjectDetail() {
                                     Date started
                                 </span>
                             </div>
+
+                            <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                                <span className="text-lg text-gray-700">
+                                    <a style={{
+                                        color: "blue",
+                                        textDecoration: "underline"
+                                    }} href={`mailto:${projectData.contact}`}>{projectData.contact}</a>
+                                </span>
+                                <span className="text-base text-gray-500">
+                                    Project contact
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
