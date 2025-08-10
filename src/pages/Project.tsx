@@ -29,79 +29,77 @@ function ProjectCard(props: {
     } = props;
     return (
         <Link to={"/project/" + id}>
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                <CardContent className="p-0">
-                    {/* Image placeholder on top */}
-                    <div className="w-full h-32 bg-gray-400 flex items-center justify-center">
-                        <span className="text-black font-medium">Image</span>
-                    </div>
+            <div className="bg-white border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer rounded-none">
+                {/* Image placeholder on top */}
+                <div className="w-full h-36 bg-gray-400 flex items-center justify-center">
+                    <span className="text-black font-medium">Image</span>
+                </div>
 
-                    {/* Content below image */}
-                    <div className="p-4 flex flex-col h-full">
-                        {/* Top content area */}
-                        <div className="flex-1 space-y-3">
-                            {/* Title and Edit Button */}
-                            <div className="flex justify-between items-start">
-                                <h3 className="text-lg font-semibold text-black flex-1">
-                                    {name}
-                                </h3>
-                                {/* Admin Edit Button */}
-                                {showAdminButtons && (
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="ml-2 p-1 h-8 w-8 hover:bg-gray-100"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                            // TODO: Add edit functionality
-                                            console.log("Edit project:", id);
-                                        }}
-                                    >
-                                        <Edit className="h-4 w-4 text-gray-600" />
-                                    </Button>
-                                )}
-                            </div>
-
-                            {/* Description */}
-                            <p className="text-sm text-black leading-relaxed">
-                                {description}
-                            </p>
-                        </div>
-
-                        {/* Bottom content area - fixed at bottom */}
-                        <div className="mt-4 space-y-3">
-                            {/* Progress Bar */}
-                            <div className="space-y-2">
-                                <div className="flex justify-between items-center text-sm">
-                                    <span className="text-black">Progress</span>
-                                    <span className="text-black font-medium">
-                                        {progress}%
-                                    </span>
-                                </div>
-                                <div className="w-full bg-gray-300 rounded-full h-2">
-                                    <div
-                                        className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                                        style={{
-                                            width: `${progress}%`
-                                        }}
-                                    ></div>
-                                </div>
-                            </div>
-
-                            {/* Category Button */}
-                            <div className="flex justify-center">
+                {/* Content below image */}
+                <div className="p-4 flex flex-col h-full">
+                    {/* Top content area */}
+                    <div className="flex-1 space-y-3">
+                        {/* Title and Edit Button */}
+                        <div className="flex justify-between items-start">
+                            <h3 className="text-lg font-semibold text-black flex-1">
+                                {name}
+                            </h3>
+                            {/* Admin Edit Button */}
+                            {showAdminButtons && (
                                 <Button
-                                    className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded"
+                                    variant="ghost"
                                     size="sm"
+                                    className="ml-2 p-1 h-8 w-8 hover:bg-gray-100"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        // TODO: Add edit functionality
+                                        console.log("Edit project:", id);
+                                    }}
                                 >
-                                    {category}
+                                    <Edit className="h-4 w-4 text-gray-600" />
                                 </Button>
+                            )}
+                        </div>
+
+                        {/* Description */}
+                        <p className="text-sm text-black leading-relaxed">
+                            {description}
+                        </p>
+                    </div>
+
+                    {/* Bottom content area - fixed at bottom */}
+                    <div className="mt-4 space-y-3">
+                        {/* Progress Bar */}
+                        <div className="space-y-2">
+                            <div className="flex justify-between items-center text-sm">
+                                <span className="text-black">Progress</span>
+                                <span className="text-black font-medium">
+                                    {progress}%
+                                </span>
+                            </div>
+                            <div className="w-full bg-gray-300 rounded-full h-2">
+                                <div
+                                    className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                                    style={{
+                                        width: `${progress}%`
+                                    }}
+                                ></div>
                             </div>
                         </div>
+
+                        {/* Category Button */}
+                        <div className="flex justify-center">
+                            <Button
+                                className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded"
+                                size="sm"
+                            >
+                                {category}
+                            </Button>
+                        </div>
                     </div>
-                </CardContent>
-            </Card>
+                </div>
+            </div>
         </Link>
     );
 }
