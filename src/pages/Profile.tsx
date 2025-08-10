@@ -97,9 +97,8 @@ export default function Profile() {
     useEffect( () => {
         const token = localStorage.getItem("token");
 
-
         const fetchProfile = async () => {
-        const url = `https://my-future-backend.onrender.com/users/@me`;
+        const url = `http://localhost:3000/user/@me`;
 
 
         const res = await fetch(url, {
@@ -107,7 +106,6 @@ export default function Profile() {
           Cookie: `${token}`
         }
         });
-        
 
         const json = await res.json();
         console.log("Fetched Profile JSON:", json); 
