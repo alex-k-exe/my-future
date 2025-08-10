@@ -1,8 +1,15 @@
-import {useMemo, useState, useEffect, useContext} from "react";
+import { useMemo, useState, useEffect, useContext } from "react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardTitle } from "../components/ui/card";
-import { Search, Filter, ArrowDownNarrowWide, Edit, Plus, X } from "lucide-react";
+import {
+    Search,
+    Filter,
+    ArrowDownNarrowWide,
+    Edit,
+    Plus,
+    X
+} from "lucide-react";
 import type { Base64Image, Project, ProjectId } from "../types";
 import { Badge } from "../components/ui/badge";
 import { Link } from "react-router-dom";
@@ -20,7 +27,7 @@ import {
     SelectTrigger,
     SelectValue
 } from "../components/ui/select";
-import {AppContext} from "../lib/AppContext.ts";
+import { AppContext } from "../lib/AppContext.ts";
 
 // Project form data type definition
 interface ProjectFormData {
@@ -288,18 +295,17 @@ function ProjectCard(props: {
                 {/* Image placeholder on top */}
                 <div className="w-full h-36 bg-gray-400 flex items-center justify-center">
                     {/*<span className="text-black font-medium">Image</span>*/}
-                    <img src={thumbnail}/>
+                    <img src={thumbnail} />
                 </div>
 
                 {/* Content below image */}
                 <div className="p-4 flex flex-col h-full">
                     {/* Top content area */}
                     <div className="flex-1 space-y-3">
-
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
+                        <br />
+                        <br />
+                        <br />
+                        <br />
                         {/* Title and Edit Button */}
                         <div className="flex justify-between items-start">
                             <h3 className="text-lg font-semibold text-black flex-1">
@@ -337,14 +343,16 @@ function ProjectCard(props: {
                             <div className="flex justify-between items-center text-sm">
                                 <span className="text-black">Progress</span>
                                 <span className="text-black font-medium">
-                                    {Math.round(progress / goal * 10000) / 100}%
+                                    {Math.round((progress / goal) * 10000) /
+                                        100}
+                                    %
                                 </span>
                             </div>
                             <div className="w-full bg-gray-300 rounded-full h-2">
                                 <div
                                     className="bg-blue-500 h-2 rounded-full transition-all duration-300"
                                     style={{
-                                        width: `${Math.round(progress / goal * 10000) / 100}%`
+                                        width: `${Math.round((progress / goal) * 10000) / 100}%`
                                     }}
                                 ></div>
                             </div>
@@ -362,12 +370,14 @@ export default function Project() {
     const [showAdminButtons, setShowAdminButtons] = useState(false);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [selectedProjectToEdit, setSelectedProjectToEdit] = useState<Project | null>(null);
+    const [selectedProjectToEdit, setSelectedProjectToEdit] =
+        useState<Project | null>(null);
 
     const appContext = useContext(AppContext);
     useEffect(() => {
         // Fetch projects from API
-        appContext.fetchApiPublic("/projects")
+        appContext
+            .fetchApiPublic("/projects")
             .then((response) => response.json())
             .then((data) => {
                 setProjectsList(data.projects);
@@ -384,8 +394,12 @@ export default function Project() {
     // Filter states
     const [afterDate, setAfterDate] = useState<Date | undefined>(undefined);
     const [beforeDate, setBeforeDate] = useState<Date | undefined>(undefined);
-    const [categories, setCategories] = useState<{ category: string; selected: boolean }[]>([]);
-    const [projectStatus, setProjectStatus] = useState<"completed" | "notCompleted" | "both">("both");
+    const [categories, setCategories] = useState<
+        { category: string; selected: boolean }[]
+    >([]);
+    const [projectStatus, setProjectStatus] = useState<
+        "completed" | "notCompleted" | "both"
+    >("both");
 
     // Filter logic
     const filteredProjects = useMemo(() => {
@@ -400,18 +414,27 @@ export default function Project() {
             // Date filter
             let matchesDate = true;
             if (afterDate) {
-                const startDate = typeof p.dateStarted === "string" ? new Date(p.dateStarted) : p.dateStarted;
+                const startDate =
+                    typeof p.dateStarted === "string"
+                        ? new Date(p.dateStarted)
+                        : p.dateStarted;
                 matchesDate = startDate >= afterDate;
             }
             if (beforeDate) {
-                const startDate = typeof p.dateStarted === "string" ? new Date(p.dateStarted) : p.dateStarted;
+                const startDate =
+                    typeof p.dateStarted === "string"
+                        ? new Date(p.dateStarted)
+                        : p.dateStarted;
                 matchesDate = matchesDate && startDate <= beforeDate;
             }
 
             // Category filter
-            const selectedCategories = categories.filter(c => c.selected).map(c => c.category);
+            const selectedCategories = categories
+                .filter((c) => c.selected)
+                .map((c) => c.category);
             const matchesCategory =
-                selectedCategories.length === 0 || selectedCategories.includes(p.category);
+                selectedCategories.length === 0 ||
+                selectedCategories.includes(p.category);
 
             // Status filter
             let matchesStatus = true;
@@ -421,9 +444,18 @@ export default function Project() {
                 matchesStatus = !p.dateCompleted;
             }
 
-            return matchesSearch && matchesDate && matchesCategory && matchesStatus;
+            return (
+                matchesSearch && matchesDate && matchesCategory && matchesStatus
+            );
         });
-    }, [projectsList, searchQuery, afterDate, beforeDate, categories, projectStatus]);
+    }, [
+        projectsList,
+        searchQuery,
+        afterDate,
+        beforeDate,
+        categories,
+        projectStatus
+    ]);
 
     // Collect all categories for MultiSelect
     const allCategories = useMemo(() => {
@@ -547,7 +579,9 @@ export default function Project() {
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent collisionPadding={8}>
-                                <Button onClick={resetFilters} className="mb-3">Reset</Button>
+                                <Button onClick={resetFilters} className="mb-3">
+                                    Reset
+                                </Button>
                                 <DatePicker
                                     label="From"
                                     date={afterDate ?? undefined}
@@ -556,7 +590,8 @@ export default function Project() {
                                 <DatePicker
                                     label="To"
                                     date={beforeDate ?? undefined}
-                                    setDate={setBeforeDate}/>
+                                    setDate={setBeforeDate}
+                                />
                                 <MultiSelect
                                     categories={categories}
                                     setCategories={setCategories}
@@ -591,10 +626,10 @@ export default function Project() {
                         </Popover>
                     </div>
                 </header>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
+                <br />
+                <br />
+                <br />
+                <br />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredProjects.map((project) => (
                         <ProjectCard

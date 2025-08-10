@@ -30,7 +30,7 @@ function App() {
         },
         updateUser: async (context: Context): Promise<void> => {
             const user = await context.fetchApi("/users/@me");
-            context.user = await user.json().then(data => data.user);
+            context.user = await user.json().then((data) => data.user);
         }
     });
 

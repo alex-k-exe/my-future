@@ -25,8 +25,8 @@ export default function SideBar({ sidebarState, toggleSideBar }: SideBarProps) {
                         background: "rgba(255, 255, 255, 0.3)",
                         borderRadius: "12px",
                         padding: "6px",
-                        marginRight: "15px",
-                }}
+                        marginRight: "15px"
+                    }}
                 />
             </div>
             <nav className="ml-4">

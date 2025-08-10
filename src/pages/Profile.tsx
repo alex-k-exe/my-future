@@ -76,8 +76,7 @@ export default function Profile() {
         {
             id: 1,
             title: "Newstead Solar Farm",
-            description:
-                "Adding new solar panels to Newstead's tallest new..."
+            description: "Adding new solar panels to Newstead's tallest new..."
         },
         {
             id: 2,

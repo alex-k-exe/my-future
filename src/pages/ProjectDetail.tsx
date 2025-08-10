@@ -3,14 +3,14 @@ import { Button } from "../components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import type { Project } from "../types";
 import { formatDate } from "../lib/utils";
-import {useContext, useEffect, useState} from "react";
-import {AppContext} from "../lib/AppContext.ts";
+import { useContext, useEffect, useState } from "react";
+import { AppContext } from "../lib/AppContext.ts";
 
 export default function ProjectDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const appContext = useContext(AppContext)
+    const appContext = useContext(AppContext);
 
     // set to loading state
     const [projectData, setProjectData] = useState({
@@ -29,28 +29,30 @@ export default function ProjectDetail() {
     useEffect(() => {
         (async () => {
             setProjectData(
-                (await appContext.fetchApiPublic(`/projects/${id}`)
-                .then(response => response.json())
-                .then(response => response.project as Project)
-                    .then(proj => {
+                await appContext
+                    .fetchApiPublic(`/projects/${id}`)
+                    .then((response) => response.json())
+                    .then((response) => response.project as Project)
+                    .then((proj) => {
                         if (proj) return proj;
                         else throw new Error("Project not found");
                     })
-                .catch(error => {
-                    console.error("Error fetching project data:", error);
-                    return {
-                        id: id || "",
-                        name: "Project Not Found",
-                        description: "No description available.",
-                        category: "Unknown",
-                        dateStarted: new Date(),
-                        thumbnail: "",
-                        progress: 0,
-                        goal: 100,
-                        contact: "N/A",
-                        businessDonations: []
-                    }
-                })));
+                    .catch((error) => {
+                        console.error("Error fetching project data:", error);
+                        return {
+                            id: id || "",
+                            name: "Project Not Found",
+                            description: "No description available.",
+                            category: "Unknown",
+                            dateStarted: new Date(),
+                            thumbnail: "",
+                            progress: 0,
+                            goal: 100,
+                            contact: "N/A",
+                            businessDonations: []
+                        };
+                    })
+            );
         })();
     }, [id]);
 
@@ -74,8 +76,8 @@ export default function ProjectDetail() {
                     <div className="text-base text-gray-600">
                         {projectData.category}
                     </div>
-                    <br/>
-                    <br/>
+                    <br />
+                    <br />
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -115,14 +117,19 @@ export default function ProjectDetail() {
                             <div className="flex justify-between items-center">
                                 <span className="text-gray-500">Progress</span>
                                 <span className="text-gray-500 font-medium">
-                                    {Math.round(projectData.progress / projectData.goal * 10000) / 100}%
+                                    {Math.round(
+                                        (projectData.progress /
+                                            projectData.goal) *
+                                            10000
+                                    ) / 100}
+                                    %
                                 </span>
                             </div>
                             <div className="w-full bg-gray-200 rounded-full h-2">
                                 <div
                                     className="bg-blue-500 h-2 rounded-full transition-all duration-300"
                                     style={{
-                                        width: `${Math.round(projectData.progress / projectData.goal * 10000) / 100}%`
+                                        width: `${Math.round((projectData.progress / projectData.goal) * 10000) / 100}%`
                                     }}
                                 ></div>
                             </div>
@@ -132,8 +139,8 @@ export default function ProjectDetail() {
                         <div className="space-y-6">
                             <div className="flex justify-between items-center py-3 border-b border-gray-200">
                                 <span className="text-xl text-gray-500">
-                                    {projectData.progress.toLocaleString()} out of{" "}
-                                    {projectData.goal.toLocaleString()}
+                                    {projectData.progress.toLocaleString()} out
+                                    of {projectData.goal.toLocaleString()}
                                 </span>
                             </div>
 
@@ -148,10 +155,15 @@ export default function ProjectDetail() {
 
                             <div className="flex justify-between items-center py-3 border-b border-gray-200">
                                 <span className="text-lg text-gray-700">
-                                    <a style={{
-                                        color: "blue",
-                                        textDecoration: "underline"
-                                    }} href={`mailto:${projectData.contact}`}>{projectData.contact}</a>
+                                    <a
+                                        style={{
+                                            color: "blue",
+                                            textDecoration: "underline"
+                                        }}
+                                        href={`mailto:${projectData.contact}`}
+                                    >
+                                        {projectData.contact}
+                                    </a>
                                 </span>
                                 <span className="text-base text-gray-500">
                                     Project contact
@@ -163,8 +175,8 @@ export default function ProjectDetail() {
 
                 {/* Description */}
                 <div className="mt-12 space-y-4">
-                    <br/>
-                    <br/>
+                    <br />
+                    <br />
                     <h3 className="text-2xl font-semibold text-gray-900">
                         Description
                     </h3>
