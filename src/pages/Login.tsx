@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { cn } from "../lib/utils";
 import { Button } from "../components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -18,45 +18,51 @@ import { Label } from "../components/ui/label";
 // import { useNavigate } from "react-router-dom";
 
 interface LoginFormProps extends ComponentPropsWithoutRef<"div"> {
-  onShowRegister?: () => void;
+    onShowRegister?: () => void;
 }
 
-export function LoginForm({ className, onShowRegister, ...props }: LoginFormProps) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loginMessage, setLoginMessage] = useState("");
+export function LoginForm({
+    className,
+    onShowRegister,
+    ...props
+}: LoginFormProps) {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [loginMessage, setLoginMessage] = useState("");
 
-  // const navigate = useNavigate();
+    // const navigate = useNavigate();
     const navigate = useNavigate();
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    try {
-      const response = await fetch("http://localhost:3000/user/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        try {
+            const response = await fetch("http://localhost:3000/user/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email, password })
+            });
 
-      const data = await response.json();
+            const data = await response.json();
 
-      if (response.ok) {
-        const jwt = data.bearerToken.token;
-        const refresh = data.refreshToken.token;
+            if (response.ok) {
+                const jwt = data.bearerToken.token;
+                const refresh = data.refreshToken.token;
 
-        // login({ email, token: jwt, refreshToken: refresh });
-        // navigate("/");
+                // login({ email, token: jwt, refreshToken: refresh });
+                // navigate("/");
 
-        setLoginMessage("Login successful!");
-      } else {
-        setLoginMessage(data.message || "Login failed. Please try again.");
-      }
-    } catch (error) {
-      setLoginMessage("An error occurred. Please try again.");
-    }
-  };
+                setLoginMessage("Login successful!");
+            } else {
+                setLoginMessage(
+                    data.message || "Login failed. Please try again."
+                );
+            }
+        } catch (error) {
+            setLoginMessage("An error occurred. Please try again.");
+        }
+    };
 
     return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
