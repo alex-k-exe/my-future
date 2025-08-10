@@ -1,76 +1,71 @@
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardTitle } from "../components/ui/card";
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, ArrowDownNarrowWide } from "lucide-react";
 import type { Base64Image, Project, ProjectId } from "../types";
 import { Badge } from "../components/ui/badge";
+import { Link } from "react-router-dom";
 
-function ProjectCard(
-    project: {
-        id: ProjectId;
-        name: string;
-        description: string;
-        category: string;
-        thumbnail: Base64Image;
-        progress: number;
-        goal: number;
-    } & {
-        onClick?: () => void;
-    }
-) {
+function ProjectCard(project: {
+    id: ProjectId;
+    name: string;
+    description: string;
+    category: string;
+    thumbnail: Base64Image;
+    progress: number;
+    goal: number;
+}) {
     return (
-        <Card
-            className="hover:shadow-lg transition-shadow cursor-pointer"
-            onClick={project.onClick}
-        >
-            <CardContent className="p-0">
-                {/* Image placeholder on top */}
-                <div className="w-full h-32 bg-gray-400 flex items-center justify-center">
-                    <span className="text-black font-medium">Image</span>
-                </div>
-
-                {/* Content below image */}
-                <div className="p-4 space-y-3">
-                    {/* Title */}
-                    <h3 className="text-lg font-semibold text-black">
-                        {project.name}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-sm text-black leading-relaxed">
-                        {project.description}
-                    </p>
-
-                    {/* Progress Bar */}
-                    <div className="space-y-2">
-                        <div className="flex justify-between items-center text-sm">
-                            <span className="text-black">Progress</span>
-                            <span className="text-black font-medium">
-                                {project.progress}%
-                            </span>
-                        </div>
-                        <div className="w-full bg-gray-300 rounded-full h-2">
-                            <div
-                                className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                                style={{ width: `${project.progress}%` }}
-                            ></div>
-                        </div>
+        <Link to={"/project/" + project.id}>
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                <CardContent className="p-0">
+                    {/* Image placeholder on top */}
+                    <div className="w-full h-32 bg-gray-400 flex items-center justify-center">
+                        <span className="text-black font-medium">Image</span>
                     </div>
 
-                    {/* Category Button */}
-                    <div className="flex justify-center">
-                        <Button
-                            className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded"
-                            size="sm"
-                        >
-                            {project.category}
-                        </Button>
+                    {/* Content below image */}
+                    <div className="p-4 space-y-3">
+                        {/* Title */}
+                        <h3 className="text-lg font-semibold text-black">
+                            {project.name}
+                        </h3>
+
+                        {/* Description */}
+                        <p className="text-sm text-black leading-relaxed">
+                            {project.description}
+                        </p>
+
+                        {/* Progress Bar */}
+                        <div className="space-y-2">
+                            <div className="flex justify-between items-center text-sm">
+                                <span className="text-black">Progress</span>
+                                <span className="text-black font-medium">
+                                    {project.progress}%
+                                </span>
+                            </div>
+                            <div className="w-full bg-gray-300 rounded-full h-2">
+                                <div
+                                    className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                                    style={{ width: `${project.progress}%` }}
+                                ></div>
+                            </div>
+                        </div>
+
+                        {/* Category Button */}
+                        <div className="flex justify-center">
+                            <Button
+                                className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded"
+                                size="sm"
+                            >
+                                {project.category}
+                            </Button>
+                        </div>
                     </div>
-                </div>
-            </CardContent>
-        </Card>
+                </CardContent>
+            </Card>
+        </Link>
     );
 }
 
@@ -199,8 +194,6 @@ export const projects: Project[] = [
 
 export default function Project() {
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("category");
-    const navigate = useNavigate();
 
     const filteredProjects = useMemo(() => {
         const lowerQuery = searchQuery.toLowerCase();
@@ -211,12 +204,6 @@ export default function Project() {
                 p.category.toLowerCase().includes(lowerQuery)
         );
     }, [searchQuery, projects]);
-
-    const categories = ["category", "category", "category"];
-
-    const handleProjectClick = (project: any) => {
-        navigate(`/project/${project.id}`);
-    };
 
     return (
         <main className="flex-1 bg-gray-50">
@@ -236,46 +223,15 @@ export default function Project() {
                                 className="pl-10"
                             />
                         </div>
-
                         {/* Filter Button */}
-                        <Button variant="outline" size="default">
-                            <Filter className="w-4 h-4" color="white" />
+                        <Button>
+                            <Filter />
                         </Button>
                     </div>
-
-                    {/* Category Buttons */}
-                    <div className="flex items-center gap-3">
-                        {categories.map((category, index) => (
-                            <Button
-                                key={index}
-                                variant={
-                                    selectedCategory === category
-                                        ? "default"
-                                        : "outline"
-                                }
-                                size="sm"
-                                onClick={() => setSelectedCategory(category)}
-                                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                                    selectedCategory === category
-                                        ? "bg-gray-500 text-white hover:bg-gray-600"
-                                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                                }`}
-                            >
-                                {category}
-                            </Button>
-                        ))}
-                    </div>
                 </header>
-
-                {/* Projects Grid with Category Headers */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredProjects.map((project) => (
-                        <div className="space-y-4">
-                            <ProjectCard
-                                onClick={() => handleProjectClick(project)}
-                                {...project}
-                            />
-                        </div>
+                        <ProjectCard {...project} />
                     ))}
                 </div>
             </div>
