@@ -80,9 +80,9 @@ function ProjectModal({
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
-                <div className="flex justify-between items-center mb-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] flex flex-col">
+                <div className="flex justify-between items-center p-6 pb-4 border-b">
                     <h2 className="text-xl font-bold">
                         {mode === "add" ? "Add New Project" : "Edit Project"}
                     </h2>
@@ -96,7 +96,11 @@ function ProjectModal({
                     </Button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form
+                    id="project-form"
+                    onSubmit={handleSubmit}
+                    className="flex-1 overflow-y-auto p-6 pt-4 space-y-4"
+                >
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                             Project Name
@@ -203,8 +207,11 @@ function ProjectModal({
                             required
                         />
                     </div>
+                </form>
 
-                    <div className="flex gap-3 pt-4">
+                {/* Fixed button area at bottom */}
+                <div className="p-6 pt-0 border-t bg-gray-50">
+                    <div className="flex gap-3">
                         <Button
                             type="button"
                             variant="outline"
@@ -215,12 +222,13 @@ function ProjectModal({
                         </Button>
                         <Button
                             type="submit"
+                            form="project-form"
                             className="flex-1 bg-black text-white hover:bg-gray-800"
                         >
                             {mode === "add" ? "Add Project" : "Save Changes"}
                         </Button>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     );
@@ -299,15 +307,12 @@ function ProjectCard(props: {
                             )}
                         </div>
                         <div className="flex place-content-start">
-                            <Badge className="mb-4">
-                                {category}
-                            </Badge>
-                            </div>
+                            <Badge className="mb-4">{category}</Badge>
+                        </div>
                         {/* Description */}
                         <p className="text-sm text-black leading-relaxed">
                             {description}
                         </p>
-                        
                     </div>
 
                     {/* Bottom content area - fixed at bottom */}
@@ -329,8 +334,6 @@ function ProjectCard(props: {
                                 ></div>
                             </div>
                         </div>
-
-                        
                     </div>
                 </div>
             </div>

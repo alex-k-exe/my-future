@@ -15,7 +15,7 @@ export interface User {
 }
 
 export interface EquipmentDonation {
-    donor: string;  // Business name
+    donor: string; // Business name
     equipment: string;
     estimatedValue: number;
 }
