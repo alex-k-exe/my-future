@@ -142,7 +142,7 @@ export default function Profile() {
                                 onClick={handleEditClick}
                                 title="Edit Profile"
                             >
-                                <Edit2 className="w-5 h-5" color="white" />
+                                <Edit2 className="w-6 h-6 bg-gray-600 text-gray-200 hover:bg-gray-500 rounded" />
                             </button>
                         </div>
                     </div>
