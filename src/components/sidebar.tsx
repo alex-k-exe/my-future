@@ -39,6 +39,7 @@ export default function SideBar({ sidebarState, toggleSideBar }: SideBarProps) {
                 <Link to="/profile" className="block pb-2.5 text-white text-lg">
                     Profile
                 </Link>
+                <img src="/hackathon_logo.svg" />
             </nav>
         </aside>
     );
