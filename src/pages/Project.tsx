@@ -26,41 +26,49 @@ function ProjectCard(project: {
                     </div>
 
                     {/* Content below image */}
-                    <div className="p-4 space-y-3">
-                        {/* Title */}
-                        <h3 className="text-lg font-semibold text-black">
-                            {project.name}
-                        </h3>
+                    <div className="p-4 flex flex-col h-full">
+                        {/* Top content area */}
+                        <div className="flex-1 space-y-3">
+                            {/* Title */}
+                            <h3 className="text-lg font-semibold text-black">
+                                {project.name}
+                            </h3>
 
-                        {/* Description */}
-                        <p className="text-sm text-black leading-relaxed">
-                            {project.description}
-                        </p>
-
-                        {/* Progress Bar */}
-                        <div className="space-y-2">
-                            <div className="flex justify-between items-center text-sm">
-                                <span className="text-black">Progress</span>
-                                <span className="text-black font-medium">
-                                    {project.progress}%
-                                </span>
-                            </div>
-                            <div className="w-full bg-gray-300 rounded-full h-2">
-                                <div
-                                    className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                                    style={{ width: `${project.progress}%` }}
-                                ></div>
-                            </div>
+                            {/* Description */}
+                            <p className="text-sm text-black leading-relaxed">
+                                {project.description}
+                            </p>
                         </div>
 
-                        {/* Category Button */}
-                        <div className="flex justify-center">
-                            <Button
-                                className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded"
-                                size="sm"
-                            >
-                                {project.category}
-                            </Button>
+                        {/* Bottom content area - fixed at bottom */}
+                        <div className="mt-4 space-y-3">
+                            {/* Progress Bar */}
+                            <div className="space-y-2">
+                                <div className="flex justify-between items-center text-sm">
+                                    <span className="text-black">Progress</span>
+                                    <span className="text-black font-medium">
+                                        {project.progress}%
+                                    </span>
+                                </div>
+                                <div className="w-full bg-gray-300 rounded-full h-2">
+                                    <div
+                                        className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                                        style={{
+                                            width: `${project.progress}%`
+                                        }}
+                                    ></div>
+                                </div>
+                            </div>
+
+                            {/* Category Button */}
+                            <div className="flex justify-center">
+                                <Button
+                                    className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded"
+                                    size="sm"
+                                >
+                                    {project.category}
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </CardContent>
@@ -74,7 +82,7 @@ export const projects: Project[] = [
     {
         id: "proj-001",
         name: "Community Garden",
-        description: "Build and maintain a garden in the local park.",
+        description: "Build a garden in the local park.",
         category: "Environment",
         dateStarted: "2024-03-01",
         dateCompleted: undefined,
