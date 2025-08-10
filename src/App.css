@@ -49,4 +49,10 @@
 
 .toggleContainer{
     min-width: 2rem;
+    background-color: #f9fafb;
+}
+
+.mainSbToggle{
+    padding-top: 0.5rem;
+    padding-left: 0.5rem;
 }
