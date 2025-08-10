@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import {useMemo, useState, useEffect, useContext} from "react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardTitle } from "../components/ui/card";
@@ -20,6 +20,7 @@ import {
     SelectTrigger,
     SelectValue
 } from "../components/ui/select";
+import {AppContext} from "../lib/AppContext.ts";
 
 // Project form data type definition
 interface ProjectFormData {
@@ -252,6 +253,7 @@ function ProjectCard(props: {
     showAdminButtons: boolean;
     onEdit: (project: Project) => void;
 }) {
+    console.log("Rendering ProjectCard with props:", props);
     const {
         id,
         name,
@@ -285,13 +287,19 @@ function ProjectCard(props: {
             <div className="bg-white border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer rounded-none">
                 {/* Image placeholder on top */}
                 <div className="w-full h-36 bg-gray-400 flex items-center justify-center">
-                    <span className="text-black font-medium">Image</span>
+                    {/*<span className="text-black font-medium">Image</span>*/}
+                    <img src={thumbnail}/>
                 </div>
 
                 {/* Content below image */}
                 <div className="p-4 flex flex-col h-full">
                     {/* Top content area */}
                     <div className="flex-1 space-y-3">
+
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
                         {/* Title and Edit Button */}
                         <div className="flex justify-between items-start">
                             <h3 className="text-lg font-semibold text-black flex-1">
@@ -329,14 +337,14 @@ function ProjectCard(props: {
                             <div className="flex justify-between items-center text-sm">
                                 <span className="text-black">Progress</span>
                                 <span className="text-black font-medium">
-                                    {progress}%
+                                    {progress / goal * 100}%
                                 </span>
                             </div>
                             <div className="w-full bg-gray-300 rounded-full h-2">
                                 <div
                                     className="bg-blue-500 h-2 rounded-full transition-all duration-300"
                                     style={{
-                                        width: `${progress}%`
+                                        width: `${progress / goal * 100}%`
                                     }}
                                 ></div>
                             </div>
@@ -348,136 +356,30 @@ function ProjectCard(props: {
     );
 }
 
-// Sample project data
-const initialProjects: Project[] = [
-    {
-        id: "proj-001",
-        name: "Community Garden",
-        description: "Build a garden in the local park.",
-        category: "Environment",
-        dateStarted: new Date("2024-03-01"),
-        dateCompleted: undefined,
-        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
-        progress: 30,
-        goal: 100,
-        contact: "garden@community.org",
-        citizenContributions: {
-            "4c8f6d82-e4c6-4478-92eb-d9342500f006": 50,
-            "7884a866-4ae1-4945-9fba-b2b8d2b7c5a9": 20
-        },
-        businessDonations: [
-            {
-                donor: "f0ab14ef-6cdc-4e1e-ae52-04de6c844dbc",
-                equipment: "Shovel",
-                estimatedValue: 50
-            },
-            {
-                donor: "7c09e008-a836-4607-9c59-6336a07368c0",
-                equipment: "Seeds",
-                estimatedValue: 5
-            }
-        ]
-    },
-    {
-        id: "proj-002",
-        name: "Art Mural",
-        description: "Create a mural for the city center wall.",
-        category: "Art",
-        dateStarted: new Date("2024-05-18"),
-        dateCompleted: undefined,
-        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
-        progress: 70,
-        goal: 100,
-        contact: "art@city.org",
-        citizenContributions: {
-            "ce93ac0e-aade-423e-94f4-85cd33a15dbb": 60,
-            "8fd03d6b-b1d6-4dc0-8985-b7c9f3115089": 10
-        },
-        businessDonations: [
-            {
-                donor: "a9adff1f-b61b-493d-9c47-9e4ea62e3ae7",
-                equipment: "Paint",
-                estimatedValue: 20
-            }
-        ]
-    },
-    {
-        id: "proj-003",
-        name: "Tech Workshop",
-        description: "Teach programming basics to youth.",
-        category: "Education",
-        dateStarted: new Date("2024-07-01"),
-        dateCompleted: undefined,
-        thumbnail: "data:image/png;base64;iVBORw0KGgoAAAANSUhEUgAA...",
-        progress: 45,
-        goal: 100,
-        contact: "tech@workshop.org",
-        citizenContributions: {
-            "c8eea5d1-2a3b-499b-9aee-555760ba0cf9": 30
-        },
-        businessDonations: [
-            {
-                donor: "aab8614f-94d6-4e4e-b9d5-00deae751184",
-                equipment: "Laptops",
-                estimatedValue: 10
-            }
-        ]
-    },
-    {
-        id: "proj-004",
-        name: "Street Clean-Up",
-        description: "Monthly clean-up of major streets.",
-        category: "Community Service",
-        dateStarted: new Date("2024-04-10"),
-        dateCompleted: new Date("2024-08-05"),
-        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
-        progress: 100,
-        goal: 100,
-        contact: "cleanup@community.org",
-        citizenContributions: {
-            "2ccab30f-80bf-4b33-9918-b374f7e9dd4e": 25,
-            "af8cc079-71e8-45ed-9bfe-9445174dc231": 40
-        },
-        businessDonations: [
-            {
-                donor: "f0ab14ef-6cdc-4e1e-ae52-04de6c844dbc",
-                equipment: "Garbage Bags",
-                estimatedValue: 15
-            }
-        ]
-    },
-    {
-        id: "proj-005",
-        name: "Solar Panel Installation",
-        description: "Equip the library with solar panels.",
-        category: "Sustainability",
-        dateStarted: new Date("2024-02-19"),
-        dateCompleted: undefined,
-        thumbnail: "data:image/png;base64;iVBORw0KGgoAAAANSUhEUgAA...",
-        progress: 60,
-        goal: 100,
-        contact: "solar@city.org",
-        citizenContributions: {
-            "30358007-5b19-47b8-979f-5b8afaae1e44": 35,
-            "ddf30d9e-0865-48d8-88ed-648c28710853": 15
-        },
-        businessDonations: [
-            {
-                donor: "16f27f95-5b85-4d54-9905-0fdaa036b0a8",
-                equipment: "Solar Panels",
-                estimatedValue: 10
-            }
-        ]
-    }
-];
-
 export default function Project() {
-    const [projectsList, setProjectsList] = useState<Project[]>(initialProjects);
+    const [projectsList, setProjectsList] = useState<Project[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [showAdminButtons, setShowAdminButtons] = useState(false);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedProjectToEdit, setSelectedProjectToEdit] = useState<Project | null>(null);
+
+    const appContext = useContext(AppContext);
+    useEffect(() => {
+        // Fetch projects from API
+        appContext.fetchApiPublic("/projects")
+            .then((response) => response.json())
+            .then((data) => {
+                setProjectsList(data.projects);
+            })
+            .catch((error) => {
+                console.error("Error fetching projects:", error);
+            });
+        appContext.updateUser(appContext).then(() => {
+            console.log("User updated:", appContext.user);
+            setShowAdminButtons(appContext.user?.accountType === "government");
+        });
+    }, [appContext]);
 
     // Filter states
     const [afterDate, setAfterDate] = useState<Date | undefined>(undefined);
@@ -689,6 +591,10 @@ export default function Project() {
                         </Popover>
                     </div>
                 </header>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredProjects.map((project) => (
                         <ProjectCard

@@ -27,6 +27,10 @@ function App() {
         },
         fetchApiPublic: async (endpoint: `/${string}`): Promise<Response> => {
             return fetch(`https://my-future-backend.onrender.com${endpoint}`);
+        },
+        updateUser: async (context: Context): Promise<void> => {
+            const user = await context.fetchApi("/users/@me");
+            context.user = await user.json().then(data => data.user);
         }
     });
 

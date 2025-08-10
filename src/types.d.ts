@@ -39,4 +39,5 @@ export interface Context {
     user: User | null;
     fetchApi: (endpoint: `/${string}`) => Promise<Response>;
     fetchApiPublic: (endpoint: `/${string}`) => Promise<Response>;
+    updateUser: (context: Context) => Promise<void>;
 }

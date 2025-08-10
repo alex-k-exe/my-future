@@ -1,5 +1,5 @@
-import { createContext } from "react";
-import type { Context } from "../types";
+import {createContext} from "react";
+import type {Context} from "../types";
 
 export const AppContext = createContext({
     user: null,
@@ -17,5 +17,9 @@ export const AppContext = createContext({
     },
     fetchApiPublic: async (endpoint: `/${string}`): Promise<Response> => {
         return fetch(`https://my-future-backend.onrender.com${endpoint}`);
+    },
+    updateUser: async (context: Context): Promise<void> => {
+        const user = await context.fetchApi("/users/@me");
+        context.user = await user.json().then(data => data.user);
     }
 } as Context);

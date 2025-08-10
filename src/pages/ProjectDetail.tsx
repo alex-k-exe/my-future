@@ -32,6 +32,10 @@ export default function ProjectDetail() {
                 (await appContext.fetchApiPublic(`/projects/${id}`)
                 .then(response => response.json())
                 .then(response => response.project as Project)
+                    .then(proj => {
+                        if (proj) return proj;
+                        else throw new Error("Project not found");
+                    })
                 .catch(error => {
                     console.error("Error fetching project data:", error);
                     return {
@@ -70,6 +74,7 @@ export default function ProjectDetail() {
                     <div className="text-base text-gray-600">
                         {projectData.category}
                     </div>
+                    <br/>
                     <br/>
                 </div>
 
@@ -127,8 +132,8 @@ export default function ProjectDetail() {
                         <div className="space-y-6">
                             <div className="flex justify-between items-center py-3 border-b border-gray-200">
                                 <span className="text-xl text-gray-500">
-                                    {projectData.progress} out of{" "}
-                                    {projectData.goal}
+                                    {projectData.progress.toLocaleString()} out of{" "}
+                                    {projectData.goal.toLocaleString()}
                                 </span>
                             </div>
 
@@ -146,6 +151,8 @@ export default function ProjectDetail() {
 
                 {/* Description */}
                 <div className="mt-12 space-y-4">
+                    <br/>
+                    <br/>
                     <h3 className="text-2xl font-semibold text-gray-900">
                         Description
                     </h3>
