@@ -337,14 +337,14 @@ function ProjectCard(props: {
                             <div className="flex justify-between items-center text-sm">
                                 <span className="text-black">Progress</span>
                                 <span className="text-black font-medium">
-                                    {progress / goal * 100}%
+                                    {Math.round(progress / goal * 10000) / 100}%
                                 </span>
                             </div>
                             <div className="w-full bg-gray-300 rounded-full h-2">
                                 <div
                                     className="bg-blue-500 h-2 rounded-full transition-all duration-300"
                                     style={{
-                                        width: `${progress / goal * 100}%`
+                                        width: `${Math.round(progress / goal * 10000) / 100}%`
                                     }}
                                 ></div>
                             </div>
