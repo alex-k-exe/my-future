@@ -2,12 +2,12 @@ import { useMemo, useState } from "react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardTitle } from "../components/ui/card";
-import { Search, Filter, ArrowDownNarrowWide } from "lucide-react";
+import { Search, Filter, ArrowDownNarrowWide, Plus, Edit } from "lucide-react";
 import type { Base64Image, Project, ProjectId } from "../types";
 import { Badge } from "../components/ui/badge";
 import { Link } from "react-router-dom";
 
-function ProjectCard(project: {
+function ProjectCard(props: {
     id: ProjectId;
     name: string;
     description: string;
@@ -15,9 +15,20 @@ function ProjectCard(project: {
     thumbnail: Base64Image;
     progress: number;
     goal: number;
+    showAdminButtons: boolean;
 }) {
+    const {
+        id,
+        name,
+        description,
+        category,
+        thumbnail,
+        progress,
+        goal,
+        showAdminButtons
+    } = props;
     return (
-        <Link to={"/project/" + project.id}>
+        <Link to={"/project/" + id}>
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
                 <CardContent className="p-0">
                     {/* Image placeholder on top */}
@@ -29,14 +40,32 @@ function ProjectCard(project: {
                     <div className="p-4 flex flex-col h-full">
                         {/* Top content area */}
                         <div className="flex-1 space-y-3">
-                            {/* Title */}
-                            <h3 className="text-lg font-semibold text-black">
-                                {project.name}
-                            </h3>
+                            {/* Title and Edit Button */}
+                            <div className="flex justify-between items-start">
+                                <h3 className="text-lg font-semibold text-black flex-1">
+                                    {name}
+                                </h3>
+                                {/* Admin Edit Button */}
+                                {showAdminButtons && (
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="ml-2 p-1 h-8 w-8 hover:bg-gray-100"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            // TODO: Add edit functionality
+                                            console.log("Edit project:", id);
+                                        }}
+                                    >
+                                        <Edit className="h-4 w-4 text-gray-600" />
+                                    </Button>
+                                )}
+                            </div>
 
                             {/* Description */}
                             <p className="text-sm text-black leading-relaxed">
-                                {project.description}
+                                {description}
                             </p>
                         </div>
 
@@ -47,14 +76,14 @@ function ProjectCard(project: {
                                 <div className="flex justify-between items-center text-sm">
                                     <span className="text-black">Progress</span>
                                     <span className="text-black font-medium">
-                                        {project.progress}%
+                                        {progress}%
                                     </span>
                                 </div>
                                 <div className="w-full bg-gray-300 rounded-full h-2">
                                     <div
                                         className="bg-blue-500 h-2 rounded-full transition-all duration-300"
                                         style={{
-                                            width: `${project.progress}%`
+                                            width: `${progress}%`
                                         }}
                                     ></div>
                                 </div>
@@ -66,7 +95,7 @@ function ProjectCard(project: {
                                     className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded"
                                     size="sm"
                                 >
-                                    {project.category}
+                                    {category}
                                 </Button>
                             </div>
                         </div>
@@ -202,6 +231,7 @@ export const projects: Project[] = [
 
 export default function Project() {
     const [searchQuery, setSearchQuery] = useState("");
+    const [showAdminButtons, setShowAdminButtons] = useState(true);
 
     const filteredProjects = useMemo(() => {
         const lowerQuery = searchQuery.toLowerCase();
@@ -217,7 +247,38 @@ export default function Project() {
         <main className="flex-1 bg-gray-50">
             <div className="flex-1 p-6">
                 <header className="mb-6">
-                    <h1 className="text-2xl font-bold mb-4">Projects</h1>
+                    <div className="flex justify-between items-center mb-4">
+                        <h1 className="text-2xl font-bold">Projects</h1>
+                        <div className="flex items-center gap-3">
+                            {/* Switch Test Button */}
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                    setShowAdminButtons(!showAdminButtons);
+                                    console.log(
+                                        "Switch Test clicked, showAdminButtons:",
+                                        !showAdminButtons
+                                    );
+                                }}
+                            >
+                                Switch Test
+                            </Button>
+                            {/* Admin Add Button */}
+                            {showAdminButtons && (
+                                <Button
+                                    className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded"
+                                    onClick={() => {
+                                        // TODO: Add new project functionality
+                                        console.log("Add new project");
+                                    }}
+                                >
+                                    <Plus className="h-4 w-4 mr-2" />
+                                    Add
+                                </Button>
+                            )}
+                        </div>
+                    </div>
 
                     {/* Search and Filter Bar */}
                     <div className="flex items-center gap-3 mb-6">
@@ -239,7 +300,11 @@ export default function Project() {
                 </header>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredProjects.map((project) => (
-                        <ProjectCard {...project} />
+                        <ProjectCard
+                            key={project.id}
+                            {...project}
+                            showAdminButtons={showAdminButtons}
+                        />
                     ))}
                 </div>
             </div>
