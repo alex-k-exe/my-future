@@ -8,13 +8,13 @@ import { Label } from "../components/ui/label";
 export default function Profile() {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [profileData, setProfileData] = useState({
-        fullName: "Alex ALex",
+        fullName: "Alex King",
         firstName: "Full",
         lastName: "Name",
         status: "Citizen",
-        address: "123 Fake Street",
-        address2: "Student One 4B",
-        email: "johnpork@gmail.com",
+        address: "341-367 South St",
+        address2: "Toowoomba QLD 4350",
+        email: "adking@hotmail.com",
         points: 256,
         lifetimePoints: 1045,
         accountImage: null as File | null
