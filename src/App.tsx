@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./App.css";
 import { LoginForm } from "./pages/Login";
 import { RegisterForm } from "./pages/Register";
 import Project from "./pages/Project";

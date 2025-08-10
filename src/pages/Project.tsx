@@ -236,22 +236,12 @@ export default function Project() {
                                 className="pl-10"
                             />
                         </div>
-
                         {/* Filter Button */}
-                        <Button variant="outline" size="default">
-                            <Filter className="w-4 h-4" color="white" />
-                        </Button>
-                        {/* Sort Button */}
-                        <Button variant="outline" size="default">
-                            <ArrowDownNarrowWide
-                                className="w-4 h-4"
-                                color="white"
-                            />
+                        <Button>
+                            <Filter />
                         </Button>
                     </div>
                 </header>
-
-                {/* Projects Grid with Category Headers */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredProjects.map((project) => (
                         <ProjectCard {...project} />

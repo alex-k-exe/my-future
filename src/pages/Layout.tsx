@@ -13,15 +13,15 @@ export default function Layout() {
     }
 
     return (
-        <div className="app-container">
+        <div className="flex h-full bg-[rgb(31,40,70)]">
             <SideBar
                 sidebarState={sidebarState}
                 toggleSideBar={toggleSideBar}
             />
             {sidebarState === "closed" && (
-                <div className="toggleContainer">
+                <div className="min-w-8">
                     <img
-                        className="mainSbToggle"
+                        className="w-6 h-6 cursor-pointer"
                         src={sidebarIcon}
                         onClick={toggleSideBar}
                         alt="Toggle Sidebar"
