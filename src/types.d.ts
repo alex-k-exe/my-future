@@ -31,7 +31,7 @@ export interface Project {
     progress: number;
     goal: number;
     contact: string;
-    citizenContributions: Record<UUID, number>;
+    citizenContributions?: Record<UUID, number>;  // Always there on backend, but not usually passed to frontend
     businessDonations: EquipmentDonation[];
 }
 
