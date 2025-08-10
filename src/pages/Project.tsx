@@ -21,65 +21,52 @@ function ProjectCard(
     }
 ) {
     return (
-        <Card className="hover:shadow-lg transition-shadow mb-4">
-            <CardContent className="p-4 flex items-start gap-4">
-                {/* TODO: thumbnail would probably be too small */}
-                {/* Image placeholder on the left */}
-                <div className="w-16 h-16 bg-gray-200 flex-shrink-0 relative">
-                    {/* Diagonal lines to match Figma design */}
-                    <svg
-                        className="w-full h-full opacity-50"
-                        viewBox="0 0 64 64"
-                    >
-                        <line
-                            x1="16"
-                            y1="16"
-                            x2="48"
-                            y2="48"
-                            stroke="gray"
-                            strokeWidth="1"
-                        />
-                        <line
-                            x1="16"
-                            y1="48"
-                            x2="48"
-                            y2="16"
-                            stroke="gray"
-                            strokeWidth="1"
-                        />
-                    </svg>
+        <Card
+            className="hover:shadow-lg transition-shadow cursor-pointer"
+            onClick={project.onClick}
+        >
+            <CardContent className="p-0">
+                {/* Image placeholder on top */}
+                <div className="w-full h-32 bg-gray-400 flex items-center justify-center">
+                    <span className="text-black font-medium">Image</span>
                 </div>
 
-                {/* Content on the right */}
-                <div className="flex-1 min-w-0">
-                    <div className="mb-2">
-                        <CardTitle
-                            className="text-base font-semibold cursor-pointer hover:text-blue-600 transition-colors"
-                            onClick={project.onClick}
-                        >
-                            {project.name}
-                        </CardTitle>
-                        <Badge>{project.category}</Badge>
-                    </div>
+                {/* Content below image */}
+                <div className="p-4 space-y-3">
+                    {/* Title */}
+                    <h3 className="text-lg font-semibold text-black">
+                        {project.name}
+                    </h3>
 
-                    <p className="text-sm text-gray-600 leading-relaxed mb-3 line-clamp-2">
+                    {/* Description */}
+                    <p className="text-sm text-black leading-relaxed">
                         {project.description}
                     </p>
 
                     {/* Progress Bar */}
-                    <div className="space-y-1">
-                        <div className="flex justify-between items-center text-xs">
-                            <span className="text-gray-500">Progress</span>
-                            <span className="text-gray-600 font-medium">
+                    <div className="space-y-2">
+                        <div className="flex justify-between items-center text-sm">
+                            <span className="text-black">Progress</span>
+                            <span className="text-black font-medium">
                                 {project.progress}%
                             </span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="w-full bg-gray-300 rounded-full h-2">
                             <div
                                 className="bg-blue-500 h-2 rounded-full transition-all duration-300"
                                 style={{ width: `${project.progress}%` }}
                             ></div>
                         </div>
+                    </div>
+
+                    {/* Category Button */}
+                    <div className="flex justify-center">
+                        <Button
+                            className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded"
+                            size="sm"
+                        >
+                            {project.category}
+                        </Button>
                     </div>
                 </div>
             </CardContent>
