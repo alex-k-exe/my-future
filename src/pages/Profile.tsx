@@ -358,9 +358,7 @@ export default function Profile() {
                                     <option value="">
                                         Select account type
                                     </option>
-                                    <option value="Personal">Personal</option>
-                                    <option value="Business">Business</option>
-                                    <option value="Premium">Premium</option>
+                                    <option value="Personal">Citizen</option>
                                 </select>
                             </div>
 
