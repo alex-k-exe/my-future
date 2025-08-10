@@ -12,7 +12,22 @@ import type { Context } from "./types";
 
 function App() {
     const [context, setContext] = useState<Context>({
-        user: null
+        user: null,
+        fetchApi: async (endpoint: `/${string}`): Promise<Response> => {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                throw new Error("No token found");
+            }
+
+            return fetch(`https://my-future-backend.onrender.com${endpoint}`, {
+                headers: {
+                    Cookie: `token=${token}`
+                }
+            });
+        },
+        fetchApiPublic: async (endpoint: `/${string}`): Promise<Response> => {
+            return fetch(`https://my-future-backend.onrender.com${endpoint}`);
+        }
     });
 
     return (
