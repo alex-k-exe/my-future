@@ -534,7 +534,7 @@ export default function Project() {
                         <h1 className="text-2xl font-bold">Projects</h1>
                         <div className="flex items-center gap-3">
                             {/* Switch Test Button */}
-                            <Button
+                            {false ? <Button
                                 variant="outline"
                                 size="sm"
                                 onClick={() => {
@@ -546,7 +546,7 @@ export default function Project() {
                                 }}
                             >
                                 Switch Test
-                            </Button>
+                            </Button> : null}
                             {/* Admin Add Button */}
                             {showAdminButtons && (
                                 <Button
