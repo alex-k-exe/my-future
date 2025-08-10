@@ -13,9 +13,11 @@ export default function Profile() {
         lastName: "Name",
         status: "Citizen",
         address: "123 Fake Street",
+        address2: "Student One 4B",
         email: "johnpork@gmail.com",
         points: 256,
-        lifetimePoints: 1045
+        lifetimePoints: 1045,
+        accountImage: null as File | null
     });
 
     const [editData, setEditData] = useState({
@@ -26,7 +28,7 @@ export default function Profile() {
         password: "",
         confirmPassword: "",
         address1: profileData.address,
-        address2: "",
+        address2: profileData.address2,
         accountImage: null as File | null
     });
 
@@ -39,8 +41,8 @@ export default function Profile() {
             password: "",
             confirmPassword: "",
             address1: profileData.address,
-            address2: "",
-            accountImage: null
+            address2: profileData.address2,
+            accountImage: profileData.accountImage
         });
         setIsEditModalOpen(true);
     };
@@ -52,7 +54,9 @@ export default function Profile() {
             lastName: editData.lastName,
             fullName: `${editData.firstName} ${editData.lastName}`,
             address: editData.address1,
-            email: editData.email
+            address2: editData.address2,
+            email: editData.email,
+            accountImage: editData.accountImage
         });
         setIsEditModalOpen(false);
     };
@@ -90,7 +94,7 @@ export default function Profile() {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-100 p-6">
+        <div className="flex-1 bg-gray-100 p-6">
             {/* Header */}
             <div className="mb-6">
                 <h1 className="text-2xl font-bold text-gray-900">My Profile</h1>
@@ -101,8 +105,18 @@ export default function Profile() {
                 <div className="flex items-center justify-between">
                     {/* Left side - Avatar and Name */}
                     <div className="flex items-center gap-6">
-                        <div className="w-20 h-20 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
-                            <User className="w-10 h-10 text-gray-600" />
+                        <div className="w-20 h-20 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+                            {profileData.accountImage ? (
+                                <img
+                                    src={URL.createObjectURL(
+                                        profileData.accountImage
+                                    )}
+                                    alt="Profile"
+                                    className="w-full h-full object-cover"
+                                />
+                            ) : (
+                                <User className="w-10 h-10 text-gray-600" />
+                            )}
                         </div>
                         <div>
                             <h2 className="text-2xl font-bold text-gray-900 mb-1">
@@ -117,14 +131,18 @@ export default function Profile() {
                     {/* Right side - Contact Info */}
                     <div className="text-right text-gray-700">
                         <p className="mb-1">{profileData.address}</p>
+                        {profileData.address2 && (
+                            <p className="mb-1 text-sm text-gray-600">
+                                {profileData.address2}
+                            </p>
+                        )}
                         <div className="flex items-center justify-end gap-2">
                             <p>{profileData.email}</p>
                             <button
                                 onClick={handleEditClick}
-                                className="text-gray-600 hover:text-gray-800 transition-colors p-1"
                                 title="Edit Profile"
                             >
-                                <Edit2 className="w-5 h-5" />
+                                <Edit2 className="w-6 h-6 bg-gray-600 text-gray-200 hover:bg-gray-500 rounded" />
                             </button>
                         </div>
                     </div>
@@ -382,13 +400,8 @@ export default function Profile() {
                     </div>
 
                     {/* Save Button */}
-                    <div className="flex justify-center py-8 border-t-4 border-blue-500 bg-blue-50 mt-6">
-                        <Button
-                            onClick={handleSaveChanges}
-                            className="px-12 py-4 bg-red-500 hover:bg-red-600 text-black font-bold text-xl rounded-lg shadow-lg border-2 border-red-700"
-                        >
-                            SAVE
-                        </Button>
+                    <div className="flex justify-center py-8 mt-6">
+                        <Button onClick={handleSaveChanges}>Save</Button>
                     </div>
                 </div>
             </Modal>

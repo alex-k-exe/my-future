@@ -12,3 +12,13 @@ export async function loadImageFromUrl(url: string, filename: string): Promise<F
     const blobData = await response.blob();
     return new File([blobData], filename, { type: response.headers.get('Content-Type') ?? undefined })
 }
+
+/** Parses a Date string and outputs it in 10 Jan 2022 for example */
+export function formatDate(s: string) {
+    const date = new Date(s);
+    return date.toLocaleDateString("en-AU", {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+    });
+}

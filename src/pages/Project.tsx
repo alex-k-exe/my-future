@@ -1,294 +1,311 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useMemo, useState } from "react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle
-} from "../components/ui/card";
-import { Search, Filter } from "lucide-react";
+import { Card, CardContent, CardTitle } from "../components/ui/card";
+import { Search, Filter, ArrowDownNarrowWide, Plus, Edit } from "lucide-react";
+import type { Base64Image, Project, ProjectId } from "../types";
+import { Badge } from "../components/ui/badge";
+import { Link } from "react-router-dom";
 
-interface ProjectCardProps {
-    title: string;
+function ProjectCard(props: {
+    id: ProjectId;
+    name: string;
     description: string;
     category: string;
-    progress?: number;
-    onClick?: () => void;
-}
-
-function ProjectCard({
-    title,
-    description,
-    progress = 75,
-    onClick
-}: Omit<ProjectCardProps, "category"> & {
-    progress?: number;
-    onClick?: () => void;
+    thumbnail: Base64Image;
+    progress: number;
+    goal: number;
+    showAdminButtons: boolean;
 }) {
+    const {
+        id,
+        name,
+        description,
+        category,
+        thumbnail,
+        progress,
+        goal,
+        showAdminButtons
+    } = props;
     return (
-        <Card className="hover:shadow-lg transition-shadow mb-4">
-            <CardContent className="p-4 flex items-start gap-4">
-                {/* Image placeholder on the left */}
-                <div className="w-16 h-16 bg-gray-200 flex-shrink-0 relative">
-                    {/* Diagonal lines to match Figma design */}
-                    <svg
-                        className="w-full h-full opacity-50"
-                        viewBox="0 0 64 64"
-                    >
-                        <line
-                            x1="16"
-                            y1="16"
-                            x2="48"
-                            y2="48"
-                            stroke="gray"
-                            strokeWidth="1"
-                        />
-                        <line
-                            x1="16"
-                            y1="48"
-                            x2="48"
-                            y2="16"
-                            stroke="gray"
-                            strokeWidth="1"
-                        />
-                    </svg>
+        <Link to={"/project/" + id}>
+            <div className="bg-white border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer rounded-none">
+                {/* Image placeholder on top */}
+                <div className="w-full h-36 bg-gray-400 flex items-center justify-center">
+                    <span className="text-black font-medium">Image</span>
                 </div>
 
-                {/* Content on the right */}
-                <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-start mb-2">
-                        <CardTitle
-                            className="text-base font-semibold cursor-pointer hover:text-blue-600 transition-colors"
-                            onClick={onClick}
-                        >
-                            {title}
-                        </CardTitle>
-                        <div className="text-xs text-gray-400">view</div>
+                {/* Content below image */}
+                <div className="p-4 flex flex-col h-full">
+                    {/* Top content area */}
+                    <div className="flex-1 space-y-3">
+                        {/* Title and Edit Button */}
+                        <div className="flex justify-between items-start">
+                            <h3 className="text-lg font-semibold text-black flex-1">
+                                {name}
+                            </h3>
+                            {/* Admin Edit Button */}
+                            {showAdminButtons && (
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="ml-2 p-1 h-8 w-8 hover:bg-gray-100"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        // TODO: Add edit functionality
+                                        console.log("Edit project:", id);
+                                    }}
+                                >
+                                    <Edit className="h-4 w-4 text-gray-600" />
+                                </Button>
+                            )}
+                        </div>
+
+                        {/* Description */}
+                        <p className="text-sm text-black leading-relaxed">
+                            {description}
+                        </p>
                     </div>
 
-                    <p className="text-sm text-gray-600 leading-relaxed mb-3 line-clamp-2">
-                        {description}
-                    </p>
-
-                    {/* Progress Bar */}
-                    <div className="space-y-1">
-                        <div className="flex justify-between items-center text-xs">
-                            <span className="text-gray-500">Progress</span>
-                            <span className="text-gray-600 font-medium">
-                                {progress}%
-                            </span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div
-                                className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                                style={{ width: `${progress}%` }}
-                            ></div>
-                        </div>
-                    </div>
-                </div>
-            </CardContent>
-        </Card>
-    );
-}
-
-export default function Project() {
-    const [searchQuery, setSearchQuery] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("category");
-    const navigate = useNavigate();
-
-    // Sample project data organized by columns
-    const projectColumns = [
-        {
-            category: "category header",
-            projects: [
-                {
-                    id: 1,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                    progress: 85,
-                    category: "Category",
-                    totalGoal: "XXXXXXXX out of XXXX",
-                    activeDays: "XXX Active Days"
-                },
-                {
-                    id: 2,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 60
-                },
-                {
-                    id: 3,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 92
-                },
-                {
-                    id: 4,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 45
-                }
-            ]
-        },
-        {
-            category: "category header",
-            projects: [
-                {
-                    id: 5,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 78
-                },
-                {
-                    id: 6,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 30
-                },
-                {
-                    id: 7,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 65
-                },
-                {
-                    id: 8,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 88
-                }
-            ]
-        },
-        {
-            category: "category header",
-            projects: [
-                {
-                    id: 9,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 55
-                },
-                {
-                    id: 10,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 95
-                },
-                {
-                    id: 11,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 40
-                },
-                {
-                    id: 12,
-                    title: "Project Title",
-                    description:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                    progress: 72
-                }
-            ]
-        }
-    ];
-
-    const categories = ["category", "category", "category"];
-
-    const handleProjectClick = (project: any) => {
-        navigate(`/project/${project.id}`);
-    };
-
-    return (
-    <div className="flex-1 bg-gray-50">
-                {/* Main Content Area */}
-                <div className="flex-1 p-6">
-                    {/* Header Section */}
-                    <div className="mb-6">
-                        <h1 className="text-2xl font-bold mb-4">Projects</h1>
-
-                        {/* Search and Filter Bar */}
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="relative flex-1">
-                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                                <Input
-                                    type="text"
-                                    placeholder="Search projects..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="pl-10"
-                                />
+                    {/* Bottom content area - fixed at bottom */}
+                    <div className="mt-4 space-y-3">
+                        {/* Progress Bar */}
+                        <div className="space-y-2">
+                            <div className="flex justify-between items-center text-sm">
+                                <span className="text-black">Progress</span>
+                                <span className="text-black font-medium">
+                                    {progress}%
+                                </span>
                             </div>
+                            <div className="w-full bg-gray-300 rounded-full h-2">
+                                <div
+                                    className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                                    style={{
+                                        width: `${progress}%`
+                                    }}
+                                ></div>
+                            </div>
+                        </div>
 
-                            {/* Filter Button */}
-                            <Button variant="outline" size="default">
-                                <Filter className="w-4 h-4" />
+                        {/* Category Button */}
+                        <div className="flex justify-center">
+                            <Button
+                                className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded"
+                                size="sm"
+                            >
+                                {category}
                             </Button>
                         </div>
-
-                        {/* Category Buttons */}
-                        <div className="flex items-center gap-3">
-                            {categories.map((category, index) => (
-                                <Button
-                                    key={index}
-                                    variant={
-                                        selectedCategory === category
-                                            ? "default"
-                                            : "outline"
-                                    }
-                                    size="sm"
-                                    onClick={() => setSelectedCategory(category)}
-                                    className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                                        selectedCategory === category
-                                            ? "bg-red-500 text-blue-500 hover:bg-red-600"
-                                            : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                                    }`}
-                                >
-                                    {category}
-                                </Button>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Projects Grid with Category Headers */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {projectColumns.map((column, columnIndex) => (
-                            <div key={columnIndex} className="space-y-4">
-                                {/* Category Header */}
-                                <div className="bg-gray-300 text-gray-700 text-sm font-medium p-3 rounded">
-                                    {column.category}
-                                </div>
-
-                                {/* Projects in this column */}
-                                <div className="space-y-4">
-                                    {column.projects.map((project) => (
-                                        <ProjectCard
-                                            key={project.id}
-                                            title={project.title}
-                                            description={project.description}
-                                            progress={project.progress}
-                                            onClick={() =>
-                                                handleProjectClick(project)
-                                            }
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
                     </div>
                 </div>
             </div>
+        </Link>
+    );
+}
 
+// Sample project data
+export const projects: Project[] = [
+    {
+        id: "proj-001",
+        name: "Community Garden",
+        description: "Build a garden in the local park.",
+        category: "Environment",
+        dateStarted: "2024-03-01",
+        dateCompleted: undefined,
+        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+        progress: 30,
+        goal: 100,
+        contact: "garden@community.org",
+        citizenContributions: {
+            "4c8f6d82-e4c6-4478-92eb-d9342500f006": 50,
+            "7884a866-4ae1-4945-9fba-b2b8d2b7c5a9": 20
+        },
+        businessDonations: [
+            {
+                donor: "f0ab14ef-6cdc-4c1e-ae52-04de6c844dbc",
+                equipment: "Shovel",
+                estimatedValue: 50
+            },
+            {
+                donor: "7c09e008-a836-4607-9c59-6336a07368c0",
+                equipment: "Seeds",
+                estimatedValue: 5
+            }
+        ]
+    },
+    {
+        id: "proj-002",
+        name: "Art Mural",
+        description: "Create a mural for the city center wall.",
+        category: "Art",
+        dateStarted: "2024-05-18",
+        dateCompleted: undefined,
+        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+        progress: 70,
+        goal: 100,
+        contact: "art@city.org",
+        citizenContributions: {
+            "ce93ac0e-aade-423e-94f4-85cd33a15dbb": 60,
+            "8fd03d6b-b1d6-4dc0-8985-b7c9f3115089": 10
+        },
+        businessDonations: [
+            {
+                donor: "a9adff1f-b61b-493d-9c47-9e4ea62e3ae7",
+                equipment: "Paint",
+                estimatedValue: 20
+            }
+        ]
+    },
+    {
+        id: "proj-003",
+        name: "Tech Workshop",
+        description: "Teach programming basics to youth.",
+        category: "Education",
+        dateStarted: "2024-07-01",
+        dateCompleted: undefined,
+        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+        progress: 45,
+        goal: 100,
+        contact: "tech@workshop.org",
+        citizenContributions: {
+            "c8eea5d1-2a3b-499b-9aee-555760ba0cf9": 30
+        },
+        businessDonations: [
+            {
+                donor: "aab8614f-94d6-4e4e-b9d5-00deae751184",
+                equipment: "Laptops",
+                estimatedValue: 10
+            }
+        ]
+    },
+    {
+        id: "proj-004",
+        name: "Street Clean-Up",
+        description: "Monthly clean-up of major streets.",
+        category: "Community Service",
+        dateStarted: "2024-04-10",
+        dateCompleted: "2024-08-05",
+        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+        progress: 100,
+        goal: 100,
+        contact: "cleanup@community.org",
+        citizenContributions: {
+            "2ccab30f-80bf-4b33-9918-b374f7e9dd4e": 25,
+            "af8cc079-71e8-45ed-9bfe-9445174dc231": 40
+        },
+        businessDonations: [
+            {
+                donor: "5f830f6c-1cca-4276-8db3-9d8de320fba0",
+                equipment: "Gloves",
+                estimatedValue: 50
+            }
+        ]
+    },
+    {
+        id: "proj-005",
+        name: "Solar Panel Installation",
+        description: "Equip the library with solar panels.",
+        category: "Sustainability",
+        dateStarted: "2024-02-19",
+        dateCompleted: undefined,
+        thumbnail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+        progress: 60,
+        goal: 100,
+        contact: "solar@city.org",
+        citizenContributions: {
+            "30358007-5b19-47b8-979f-5b8afaae1e44": 35,
+            "ddf30d9e-0865-48d8-88ed-648c28710853": 15
+        },
+        businessDonations: [
+            {
+                donor: "16f27f95-5b85-4d54-9905-0fdaa036b0a8",
+                equipment: "Solar Panels",
+                estimatedValue: 10
+            }
+        ]
+    }
+] as const;
+
+export default function Project() {
+    const [searchQuery, setSearchQuery] = useState("");
+    const [showAdminButtons, setShowAdminButtons] = useState(true);
+
+    const filteredProjects = useMemo(() => {
+        const lowerQuery = searchQuery.toLowerCase();
+        return projects.filter(
+            (p) =>
+                p.name.toLowerCase().includes(lowerQuery) ||
+                p.description.toLowerCase().includes(lowerQuery) ||
+                p.category.toLowerCase().includes(lowerQuery)
+        );
+    }, [searchQuery, projects]);
+
+    return (
+        <main className="flex-1 bg-gray-50">
+            <div className="flex-1 p-6">
+                <header className="mb-6">
+                    <div className="flex justify-between items-center mb-4">
+                        <h1 className="text-2xl font-bold">Projects</h1>
+                        <div className="flex items-center gap-3">
+                            {/* Switch Test Button */}
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                    setShowAdminButtons(!showAdminButtons);
+                                    console.log(
+                                        "Switch Test clicked, showAdminButtons:",
+                                        !showAdminButtons
+                                    );
+                                }}
+                            >
+                                Switch Test
+                            </Button>
+                            {/* Admin Add Button */}
+                            {showAdminButtons && (
+                                <Button
+                                    className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded"
+                                    onClick={() => {
+                                        // TODO: Add new project functionality
+                                        console.log("Add new project");
+                                    }}
+                                >
+                                    <Plus className="h-4 w-4 mr-2" />
+                                    Add
+                                </Button>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Search and Filter Bar */}
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="relative flex-1">
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                            <Input
+                                type="text"
+                                placeholder="Search projects..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="pl-10"
+                            />
+                        </div>
+                        {/* Filter Button */}
+                        <Button>
+                            <Filter />
+                        </Button>
+                    </div>
+                </header>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredProjects.map((project) => (
+                        <ProjectCard
+                            key={project.id}
+                            {...project}
+                            showAdminButtons={showAdminButtons}
+                        />
+                    ))}
+                </div>
+            </div>
+        </main>
     );
 }

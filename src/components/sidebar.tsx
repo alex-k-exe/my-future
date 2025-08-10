@@ -1,5 +1,5 @@
+import { Link } from "react-router-dom";
 import sidebarIcon from "../assets/sidebarIcon.svg";
-import "../sidebar.css";
 
 type SideBarProps = {
     sidebarState: "open" | "closed";
@@ -9,27 +9,30 @@ type SideBarProps = {
 export default function SideBar({ sidebarState, toggleSideBar }: SideBarProps) {
     return (
         <aside
-            className={`sidebar ${sidebarState === "open" ? "expanded" : "collapsed"}`}
+            className={`bg-[rgb(31,40,70)] h-full transition-all duration-300 ease-in-out overflow-hidden text-white ${
+                sidebarState === "open" ? "w-1/5 max-w-80" : "w-0"
+            }`}
             id="sidebar"
         >
-            <div className="profileMenu">
-                <p id="profileLink">Profile</p>
+            <div className="mt-4 mb-20">
                 <img
                     src={sidebarIcon}
                     alt="Toggle Sidebar"
                     onClick={toggleSideBar}
-                    className="sidebarToggle clickable"
+                    className="w-6 ml-auto pr-1 cursor-pointer"
                 />
             </div>
-            <div className="addTaskMenu clickable">
-                <p>Add Task</p>
-            </div>
-            <div className="todayMenu clickable">
-                <p>Today</p>
-            </div>
-            <div className="upcomingMenu clickable">
-                <p>Upcoming</p>
-            </div>
+            <nav className="ml-4">
+                <Link to="/" className="block pb-2.5 text-white text-lg">
+                    Home
+                </Link>
+                <Link to="/project" className="block pb-2.5 text-white text-lg">
+                    Projects
+                </Link>
+                <Link to="/profile" className="block pb-2.5 text-white text-lg">
+                    Profile
+                </Link>
+            </nav>
         </aside>
     );
 }

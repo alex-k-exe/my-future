@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./App.css";
 import { LoginForm } from "./pages/Login";
 import { RegisterForm } from "./pages/Register";
 import Project from "./pages/Project";
@@ -20,9 +19,9 @@ function App() {
         <Router>
             <AppContext.Provider value={context}>
                 <Routes>
-                        <Route path="/login" element={<LoginForm />} />
-                        <Route path="/register" element={<RegisterForm />} />
-                        <Route path="/" element={<Layout />}>
+                    <Route path="/login" element={<LoginForm />} />
+                    <Route path="/register" element={<RegisterForm />} />
+                    <Route path="/" element={<Layout />}>
                         <Route index element={<Home />} />
                         <Route path="project" element={<Project />} />
                         <Route
