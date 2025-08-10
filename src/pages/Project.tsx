@@ -61,11 +61,16 @@ function ProjectCard(props: {
                                 </Button>
                             )}
                         </div>
-
+                        <div className="flex place-content-start">
+                            <Badge className="mb-4">
+                                {category}
+                            </Badge>
+                            </div>
                         {/* Description */}
                         <p className="text-sm text-black leading-relaxed">
                             {description}
                         </p>
+                        
                     </div>
 
                     {/* Bottom content area - fixed at bottom */}
@@ -88,15 +93,7 @@ function ProjectCard(props: {
                             </div>
                         </div>
 
-                        {/* Category Button */}
-                        <div className="flex justify-center">
-                            <Button
-                                className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded"
-                                size="sm"
-                            >
-                                {category}
-                            </Button>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
