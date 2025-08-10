@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import type { Project } from "../types";
-import { daysSince } from "../lib/utils";
+import { formatDate } from "../lib/utils";
 
 export default function ProjectDetail() {
     const { id } = useParams();
@@ -95,7 +95,7 @@ export default function ProjectDetail() {
                         <div className="mb-3">
                             <div className="flex justify-between items-center">
                                 <span className="text-gray-500">Progress</span>
-                                <span className="text-gray-600 font-medium">
+                                <span className="text-gray-500 font-medium">
                                     {projectData.progress}%
                                 </span>
                             </div>
@@ -113,13 +113,18 @@ export default function ProjectDetail() {
                         <div className="space-y-6">
                             <div className="flex justify-between items-center py-3 border-b border-gray-200">
                                 <span className="text-xl text-gray-500">
-                                    {projectData.progress} out of {projectData.goal}
+                                    {projectData.progress} out of{" "}
+                                    {projectData.goal}
                                 </span>
                             </div>
 
                             <div className="flex justify-between items-center py-3 border-b border-gray-200">
                                 <span className="text-lg text-gray-700">
-                                    {Object.keys(projectData.citizenContributions).length}
+                                    {
+                                        Object.keys(
+                                            projectData.citizenContributions
+                                        ).length
+                                    }
                                 </span>
                                 <span className="text-base text-gray-500">
                                     Contributors
@@ -128,10 +133,10 @@ export default function ProjectDetail() {
 
                             <div className="flex justify-between items-center py-3 border-b border-gray-200">
                                 <span className="text-lg text-gray-700">
-                                    {daysSince(projectData.dateStarted)}
+                                    {formatDate(projectData.dateStarted)}
                                 </span>
                                 <span className="text-base text-gray-500">
-                                    Active days
+                                    Date started
                                 </span>
                             </div>
                         </div>

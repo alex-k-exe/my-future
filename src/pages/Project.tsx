@@ -1,89 +1,84 @@
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardTitle } from "../components/ui/card";
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, ArrowDownNarrowWide } from "lucide-react";
 import type { Base64Image, Project, ProjectId } from "../types";
 import { Badge } from "../components/ui/badge";
+import { Link } from "react-router-dom";
 
-function ProjectCard(
-    project: {
-        id: ProjectId;
-        name: string;
-        description: string;
-        category: string;
-        thumbnail: Base64Image;
-        progress: number;
-        goal: number;
-    } & {
-        onClick?: () => void;
-    }
-) {
+function ProjectCard(project: {
+    id: ProjectId;
+    name: string;
+    description: string;
+    category: string;
+    thumbnail: Base64Image;
+    progress: number;
+    goal: number;
+}) {
     return (
-        <Card className="hover:shadow-lg transition-shadow mb-4">
-            <CardContent className="p-4 flex items-start gap-4">
-                {/* TODO: thumbnail would probably be too small */}
-                {/* Image placeholder on the left */}
-                <div className="w-16 h-16 bg-gray-200 flex-shrink-0 relative">
-                    {/* Diagonal lines to match Figma design */}
-                    <svg
-                        className="w-full h-full opacity-50"
-                        viewBox="0 0 64 64"
-                    >
-                        <line
-                            x1="16"
-                            y1="16"
-                            x2="48"
-                            y2="48"
-                            stroke="gray"
-                            strokeWidth="1"
-                        />
-                        <line
-                            x1="16"
-                            y1="48"
-                            x2="48"
-                            y2="16"
-                            stroke="gray"
-                            strokeWidth="1"
-                        />
-                    </svg>
-                </div>
-
-                {/* Content on the right */}
-                <div className="flex-1 min-w-0">
-                    <div className="mb-2">
-                        <CardTitle
-                            className="text-base font-semibold cursor-pointer hover:text-blue-600 transition-colors"
-                            onClick={project.onClick}
+        <Link to={"/project/" + project.id}>
+            <Card className="hover:shadow-lg transition-shadow mb-4">
+                <CardContent className="p-4 flex items-start gap-4">
+                    {/* TODO: thumbnail would probably be too small */}
+                    {/* Image placeholder on the left */}
+                    <div className="w-16 h-16 bg-gray-200 flex-shrink-0 relative">
+                        {/* Diagonal lines to match Figma design */}
+                        <svg
+                            className="w-full h-full opacity-50"
+                            viewBox="0 0 64 64"
                         >
-                            {project.name}
-                        </CardTitle>
-                        <Badge>{project.category}</Badge>
+                            <line
+                                x1="16"
+                                y1="16"
+                                x2="48"
+                                y2="48"
+                                stroke="gray"
+                                strokeWidth="1"
+                            />
+                            <line
+                                x1="16"
+                                y1="48"
+                                x2="48"
+                                y2="16"
+                                stroke="gray"
+                                strokeWidth="1"
+                            />
+                        </svg>
                     </div>
 
-                    <p className="text-sm text-gray-600 leading-relaxed mb-3 line-clamp-2">
-                        {project.description}
-                    </p>
-
-                    {/* Progress Bar */}
-                    <div className="space-y-1">
-                        <div className="flex justify-between items-center text-xs">
-                            <span className="text-gray-500">Progress</span>
-                            <span className="text-gray-600 font-medium">
-                                {project.progress}%
-                            </span>
+                    {/* Content on the right */}
+                    <div className="flex-1 min-w-0">
+                        <div className="mb-2">
+                            <CardTitle className="text-base font-semibold">
+                                {project.name}
+                            </CardTitle>
+                            <Badge>{project.category}</Badge>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div
-                                className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                                style={{ width: `${project.progress}%` }}
-                            ></div>
+
+                        <p className="text-sm text-gray-500 leading-relaxed mb-3 line-clamp-2">
+                            {project.description}
+                        </p>
+
+                        {/* Progress Bar */}
+                        <div className="space-y-1">
+                            <div className="flex justify-between items-center text-xs">
+                                <span className="text-gray-500">Progress</span>
+                                <span className="text-gray-500 font-medium">
+                                    {project.progress}%
+                                </span>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-2">
+                                <div
+                                    className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                                    style={{ width: `${project.progress}%` }}
+                                ></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </CardContent>
-        </Card>
+                </CardContent>
+            </Card>
+        </Link>
     );
 }
 
@@ -212,8 +207,6 @@ export const projects: Project[] = [
 
 export default function Project() {
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("category");
-    const navigate = useNavigate();
 
     const filteredProjects = useMemo(() => {
         const lowerQuery = searchQuery.toLowerCase();
@@ -224,12 +217,6 @@ export default function Project() {
                 p.category.toLowerCase().includes(lowerQuery)
         );
     }, [searchQuery, projects]);
-
-    const categories = ["category", "category", "category"];
-
-    const handleProjectClick = (project: any) => {
-        navigate(`/project/${project.id}`);
-    };
 
     return (
         <main className="flex-1 bg-gray-50">
@@ -254,41 +241,20 @@ export default function Project() {
                         <Button variant="outline" size="default">
                             <Filter className="w-4 h-4" color="white" />
                         </Button>
-                    </div>
-
-                    {/* Category Buttons */}
-                    <div className="flex items-center gap-3">
-                        {categories.map((category, index) => (
-                            <Button
-                                key={index}
-                                variant={
-                                    selectedCategory === category
-                                        ? "default"
-                                        : "outline"
-                                }
-                                size="sm"
-                                onClick={() => setSelectedCategory(category)}
-                                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                                    selectedCategory === category
-                                        ? "bg-red-500 text-blue-500 hover:bg-red-600"
-                                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                                }`}
-                            >
-                                {category}
-                            </Button>
-                        ))}
+                        {/* Sort Button */}
+                        <Button variant="outline" size="default">
+                            <ArrowDownNarrowWide
+                                className="w-4 h-4"
+                                color="white"
+                            />
+                        </Button>
                     </div>
                 </header>
 
                 {/* Projects Grid with Category Headers */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredProjects.map((project) => (
-                        <div className="space-y-4">
-                            <ProjectCard
-                                onClick={() => handleProjectClick(project)}
-                                {...project}
-                            />
-                        </div>
+                        <ProjectCard {...project} />
                     ))}
                 </div>
             </div>

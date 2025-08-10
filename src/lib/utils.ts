@@ -5,15 +5,12 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-/** Parses a date in format "YYYY-MM-DD" and returns how many days it has been since that date */
-export function daysSince(dateString: string) {
-    const givenDate = new Date(dateString);
-    const today = new Date();
-
-    // Difference in milliseconds
-    const diffInMs = today.getTime() - givenDate.getTime();
-
-    // Convert to days
-    const msInDay = 1000 * 60 * 60 * 24;
-    return Math.round(diffInMs / msInDay);
+/** Parses a Date string and outputs it in 10 Jan 2022 for example */
+export function formatDate(s: string) {
+    const date = new Date(s);
+    return date.toLocaleDateString("en-AU", {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+    });
 }
