@@ -136,7 +136,7 @@ export default function Profile() {
                                     className="w-full h-full object-cover"
                                 />
                             ) : (
-                                <User className="w-10 h-10 text-gray-600" />
+                                <User className="w-10 h-10 text-gray-500" />
                             )}
                         </div>
                         <div>
