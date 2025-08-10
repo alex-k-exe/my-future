@@ -133,19 +133,6 @@ export default function ProjectDetail() {
 
                             <div className="flex justify-between items-center py-3 border-b border-gray-200">
                                 <span className="text-lg text-gray-700">
-                                    {
-                                        // Object.keys(
-                                        //     projectData.citizenContributions
-                                        // ).length
-                                    }
-                                </span>
-                                <span className="text-base text-gray-500">
-                                    Contributors
-                                </span>
-                            </div>
-
-                            <div className="flex justify-between items-center py-3 border-b border-gray-200">
-                                <span className="text-lg text-gray-700">
                                     {formatDate(projectData.dateStarted)}
                                 </span>
                                 <span className="text-base text-gray-500">
